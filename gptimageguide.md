@@ -168,7 +168,8 @@ result = client.images.edit(
         open("soap.png", "rb"),
     ],
     prompt="Photorealistic gift basket on white, labeled 'Relax & Unwind', containing all items",
-    input_fidelity="high",
+    # gpt-image-2 は input_fidelity を受け付けない(常に最大忠実度・3-4 節参照)
+    # 旧モデル gpt-image-1.5 を使う場合のみ input_fidelity="high" を指定可能
 )
 ```
 
@@ -259,7 +260,7 @@ Keep the woman's face, hair, and pose exactly as in the reference.
 Replace only the background with a neon Tokyo street at night.
 ```
 
-`input_fidelity: "high"` と併用すると効果絶大です。
+gpt-image-2 は入力画像を常に最大忠実度で処理するため、明示的に「保持するもの」を書くだけで強い再現性が得られます(`input_fidelity` パラメータの指定は不要、3-4 節参照)。
 
 ### 6-5. Agentic推論を活かす使い方
 
