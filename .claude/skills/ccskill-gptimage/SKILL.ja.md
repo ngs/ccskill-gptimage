@@ -3,7 +3,7 @@ name: ccskill-gptimage
 description: |
   画像生成が必要な時に使用するスキル。
   OpenAI gpt-image-2 (ChatGPT Images 2.0) で高品質な画像を生成・編集します。
-  日本語/多言語テキスト描画、Agentic 推論、参照画像保持、透過 PNG、複雑インフォグラフィックに強い。
+  日本語/多言語テキスト描画、複雑指示の解釈、参照画像保持、透過 PNG、複雑インフォグラフィックに強い。
 ---
 
 # ccskill-gptimage 画像生成スキル
@@ -127,45 +127,82 @@ OpenAI 公式ガイドに明記:*"Masking with GPT Image is entirely prompt-base
 
 > 一次資料: [OpenAI Image generation guide](https://developers.openai.com/api/docs/guides/image-generation), [gpt-image-2 model page](https://developers.openai.com/api/docs/models/gpt-image-2)
 
-gpt-image-2 は **業界初の Agentic 画像生成モデル** で、画像を生成する前に構造を能動的にリサーチ・計画・推論します。タグ羅列ではなく **クリエイティブディレクターの指示書** のようなプロンプトが最大の効果を発揮します。
+OpenAI は gpt-image-2 を「state-of-the-art image generation model for fast, high-quality image generation and editing」と表現しています([モデルページ](https://developers.openai.com/api/docs/models/gpt-image-2))。従来世代より強い指示追従性・改善されたレイアウト・向上したテキスト描画が特徴です。タグ羅列ではなく **クリエイティブディレクターの指示書**(順序立てて、具体的に、制約を明示して)のようなプロンプトが最大の効果を発揮します。
 
-### 構造化テンプレ
+### 構造化プロンプト: 順序を揃える、フォーマットは自由
+
+Cookbook 原文:
+
+> "Write prompts in a consistent order (background/scene → subject → key details → constraints)"
+> "Use the format that is easiest to maintain. Minimal prompts, descriptive paragraphs, JSON-like structures, instruction-style prompts, and tag-based prompts can all work well"
+> — [OpenAI Cookbook](https://developers.openai.com/cookbook/examples/multimodal/image-gen-models-prompting-guide)
+
+要は **4 区分の順序** を守ること。フォーマット(段落・JSON・tag・箇条書き)は自由で、維持しやすいものを選べばよい:
 
 ```
-[Subject] / [Style] / [Composition] / [Lighting] / [Details] / [Constraints]
+背景/シーン → 被写体 → 細部の要素 → Constraints(制約)
 ```
 
-**悪い例**: `cute cat`
+段落形式での例:
+```
+A dim Kyoto ryokan tatami room at dusk, rain against shoji screens (背景/シーン) —
+an elderly potter in indigo kimono kneading clay at a low wooden wheel (被写体),
+warm paper-lantern light catching the wet clay and his silver hair (細部).
+No modern objects, no text. (Constraints)
+```
 
-**良い例**:
-```
-A gray tabby kitten (subject) /
-flat vector illustration, Japanese children's book style (style) /
-centered, rule of thirds, medium shot (composition) /
-soft morning light, warm tones (lighting) /
-wearing a tiny red scarf, holding a yellow star (details) /
-white background, no text (constraints)
-```
+**追加の軸**(必要に応じて使う / 必須ではない): スタイル、構図、ライティング、カメラ、カラーパレット。Cookbook はこれらを固定スロットではなく「順序の規律」として扱っているので、過度に形式化しないこと。
 
 ### テキスト描画(gpt-image-2 の最大の強み)
 
-画像内にテキストを入れたい時は **引用符で厳密に囲う**:
+Cookbook 原文:
+
+> "Put literal text in **quotes** or **ALL CAPS** and specify typography details (font style, size, color, placement)"
+> — [OpenAI Cookbook](https://developers.openai.com/cookbook/examples/multimodal/image-gen-models-prompting-guide)
+
+描画したい文字列のマークアップは 2 通り、どちらでも OK:
+
+- **引用符**(スペースや多言語混在を含む場合はこちら推奨):
+  ```
+  ...poster with the exact title "腹落ちDMARC" in large serif Japanese font at the top
+  ```
+- **ALL CAPS**(短い単言語の見出し向け):
+  ```
+  ...bold block typography reading SHIPPING TODAY across the center
+  ```
+
+**タイポグラフィ詳細は必ず添える** — フォントスタイル・サイズ・色・配置。文字列だけ指定してもうまく描画されません:
 
 ```
-...poster with the exact title "腹落ちDMARC" in large serif Japanese font at the top,
-and the subtitle "Email Authentication for SaaS" in smaller English sans-serif below.
+...headline "Email Authentication for SaaS" in medium-weight English sans-serif,
+white on dark navy, centered at the top one-third of the canvas.
 ```
 
-gpt-image-2 は多言語テキスト、特に **日本語(漢字/かな)・絵文字の混在表現** が大幅に強化されています。日本語ポスター・SNS バナー・スライド見出しが一発で読める品質で出ます。
+gpt-image-2 は多言語テキスト、特に **日本語(漢字/かな)・絵文字の混在表現** が大幅に強化されており、日本語ポスター・SNS バナー・スライド見出しが一発で読める品質で出ます。
 
-### 否定形ではなく肯定形で
+### 本文は肯定形 + Constraints で除外を明示
 
-| ❌ 悪い | ✅ 良い |
+公式 Cookbook は **2 つのパターンを併用** することを推奨しています。
+
+**本文描写**: 「あるもの」を肯定形で書く。
+
+| 曖昧 | 具体的 |
 |---|---|
 | `a room without furniture` | `an empty room with bare walls and polished concrete floor` |
-| `no text` | `clean illustrated background, decorative only` |
 
-モデルは「〜ではない」より「〜である」を正確に反映します。
+**Constraints 節**: 除外したいもの・不変にしたいものは明示的に列挙する。Cookbook 原文:
+
+> "State exclusions and invariants explicitly (e.g., 'no watermark,' 'no extra text,' 'no logos/trademarks')"
+> — [OpenAI Cookbook: GPT Image Generation Models Prompting Guide](https://developers.openai.com/cookbook/examples/multimodal/image-gen-models-prompting-guide)
+
+組み合わせた例:
+```
+A flat-lay desk scene with a leather notebook, a brass pen, and a ceramic coffee mug
+on warm oak wood, soft window light from the left.
+Constraints: no watermark, no extra text, no logos.
+```
+
+本文は肯定形、Constraints 行で除外要素を列挙、という書き分けがポイントです。
 
 ### 編集時は「保持するもの」を明示
 
@@ -176,13 +213,22 @@ Replace only the background with a neon Tokyo street at night.
 
 > gpt-image-2 は **常に自動で最大忠実度** で入力画像を処理するので、`input_fidelity` パラメータの指定は不要(指定するとエラー)。**プロンプト内で「保持したい要素」を文章で明示** すれば、自動高忠実度処理と組み合わさって構図保持はかなり強く効きます。
 
-### Agentic 推論を活かす「ゴール伝達型」プロンプト
+### ゴール指示 + 小さく段階的に refine
 
-gpt-image-2 は内部で計画・推論するため、**最終的に達成したいゴールを伝える** のが有効です。
+Cookbook が推奨する 2 つのパターンを**併用**します。
+
+**1. 手順ではなくゴールを伝える**。最終成果物が「何のために」あるかを書くと、構造的な選択はモデルが行います:
 
 | ❌ 手順指示型 | ✅ ゴール伝達型 |
 |---|---|
 | `draw a bar chart of 4 bars with values 10 20 30 40 colored blue` | `Create an infographic comparing Q1-Q4 revenue (10, 20, 30, 40 million yen) for a board deck. Use a clean dark tech aesthetic with neon blue accents. Include title, axis labels, and value labels on each bar.` |
+
+**2. 小さな単一変更で段階的に refine する**。Cookbook 原文:
+
+> "Long prompts can work well, but debugging is easier when you start with a clean base prompt and refine with small, single-change follow-ups"
+> — [OpenAI Cookbook](https://developers.openai.com/cookbook/examples/multimodal/image-gen-models-prompting-guide)
+
+実践: ゴール指向のベースプロンプトで 1 回生成 → 1 点ずつ修正指示(「棒を太く」「アクセントをオレンジに」)。巨大な一発プロンプトに全調整を詰め込むより安く、デバッグしやすい。
 
 ### スタイル指定は固有名詞より視覚特徴の分解で
 
@@ -223,7 +269,7 @@ gpt-image-2 は内部で計画・推論するため、**最終的に達成した
 | 用途 | 第一選択 | 理由 |
 |---|---|---|
 | 日本語/漢字テキスト入りポスター | **ccskill-gptimage** | gpt-image-2 のテキスト描画が最強 |
-| 概念図/業務インフォグラフィック | **ccskill-gptimage** | Agentic 推論で構造を計画 |
+| 概念図/業務インフォグラフィック | **ccskill-gptimage** | 強い指示追従とテキストレイアウト |
 | 既存画像の編集・部分修正 | **ccskill-gptimage** | 入力画像を常に最大忠実度で処理 |
 | 写真風/イラスト風の単体ビジュアル | どちらでも | コスト感は近い |
 | 透過 PNG (ロゴ・アイコン・スプライト) | どちらでも | gpt-image-2 は不可だが (a) `--model gpt-image-1.5` 切替、(b) `rembg` 後処理、(c) ccskill-nanobanana のいずれも実用 |

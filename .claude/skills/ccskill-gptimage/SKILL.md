@@ -3,7 +3,7 @@ name: ccskill-gptimage
 description: |
   Skill for image generation needs.
   Generate and edit high-quality images via OpenAI gpt-image-2 (ChatGPT Images 2.0).
-  Strong at multilingual text rendering (Japanese included), agentic visual reasoning,
+  Strong at multilingual text rendering (Japanese included), complex instruction following,
   reference-image fidelity, transparent PNG, and complex infographics.
 ---
 
@@ -123,30 +123,82 @@ Real-world example (anonymizing the map inside an Apple Business "lost mode loca
 
 > Sources: [OpenAI Image generation guide](https://developers.openai.com/api/docs/guides/image-generation), [gpt-image-2 model page](https://developers.openai.com/api/docs/models/gpt-image-2)
 
-gpt-image-2 is the **first agentic image generation model**: it actively researches, plans and reasons about structure before generating. Prompts written like a creative director's brief work best — not tag-soup.
+OpenAI describes gpt-image-2 as the "state-of-the-art image generation model for fast, high-quality image generation and editing" ([model page](https://developers.openai.com/api/docs/models/gpt-image-2)), with strong instruction following, improved layouts, and better text rendering than previous generations. Prompts written like a creative director's brief — ordered, specific, with explicit constraints — work best.
 
-### Structured prompt template
+### Structured prompt: consistent ordering, free format
+
+Per the Cookbook:
+
+> "Write prompts in a consistent order (background/scene → subject → key details → constraints)"
+> "Use the format that is easiest to maintain. Minimal prompts, descriptive paragraphs, JSON-like structures, instruction-style prompts, and tag-based prompts can all work well"
+> — [OpenAI Cookbook](https://developers.openai.com/cookbook/examples/multimodal/image-gen-models-prompting-guide)
+
+Keep the **4-part order** — the format itself (paragraph / JSON / tag / bullet) is free, pick the one easiest to maintain:
 
 ```
-[Subject] / [Style] / [Composition] / [Lighting] / [Details] / [Constraints]
+background/scene → subject → key details → constraints
 ```
+
+Example (paragraph form):
+```
+A dim Kyoto ryokan tatami room at dusk, rain against shoji screens (scene) —
+an elderly potter in indigo kimono kneading clay at a low wooden wheel (subject),
+warm paper-lantern light catching the wet clay and his silver hair (key details).
+No modern objects, no text.
+```
+
+**Expanded axes** (add when relevant, not required every time): style, composition, lighting, camera, color palette. These are cues, not mandatory slots — the Cookbook treats structure as ordering discipline, not a fixed template.
 
 ### Text rendering (gpt-image-2's flagship strength)
 
-Wrap any text you want rendered in **strict quotation marks**:
+Per the Cookbook:
+
+> "Put literal text in **quotes** or **ALL CAPS** and specify typography details (font style, size, color, placement)"
+> — [OpenAI Cookbook](https://developers.openai.com/cookbook/examples/multimodal/image-gen-models-prompting-guide)
+
+Two equivalent ways to mark the literal string to render:
+
+- **Quotes** (best when the string contains spaces or mixed-language characters):
+  ```
+  ...poster with the exact title "腹落ちDMARC" in large serif Japanese font at the top
+  ```
+- **ALL CAPS** (good for short, single-language headlines):
+  ```
+  ...bold block typography reading SHIPPING TODAY across the center
+  ```
+
+**Always include typography details** — font style, size, color, placement. Just naming the string is not enough:
 
 ```
-...poster with the exact title "腹落ちDMARC" in large serif Japanese font at the top,
-and the subtitle "Email Authentication for SaaS" in smaller English sans-serif below.
+...headline "Email Authentication for SaaS" in medium-weight English sans-serif,
+white on dark navy, centered at the top one-third of the canvas.
 ```
 
 Multilingual text (especially Japanese kanji/kana and emoji) is dramatically improved over previous generations.
 
-### Use positive form, not negation
+### Positive body + explicit exclusions in constraints
 
-| ❌ | ✅ |
+Two complementary patterns — use both:
+
+**Body description**: state what *is* there in positive form.
+
+| Vague | Concrete |
 |---|---|
 | `a room without furniture` | `an empty room with bare walls and polished concrete floor` |
+
+**Constraints**: state exclusions and invariants explicitly. Per the Cookbook:
+
+> "State exclusions and invariants explicitly (e.g., 'no watermark,' 'no extra text,' 'no logos/trademarks')"
+> — [OpenAI Cookbook: GPT Image Generation Models Prompting Guide](https://developers.openai.com/cookbook/examples/multimodal/image-gen-models-prompting-guide)
+
+Example (combined):
+```
+A flat-lay desk scene with a leather notebook, a brass pen, and a ceramic coffee mug
+on warm oak wood, soft window light from the left.
+Constraints: no watermark, no extra text, no logos.
+```
+
+The body uses positive description; the constraints line names what to keep out.
 
 ### When editing, name what to keep
 
@@ -157,13 +209,22 @@ Replace only the background with a neon Tokyo street at night.
 
 > gpt-image-2 always processes input images at maximum fidelity, so `input_fidelity` is unnecessary (and rejected by the API). The combination of automatic high fidelity + explicit "Preserve …" wording yields strong reference preservation.
 
-### Goal-oriented prompts beat step-by-step instructions
+### Goal description + small iterative refinements
 
-Because gpt-image-2 plans internally, telling it the **goal** outperforms scripting the steps:
+Two complementary patterns recommended by the Cookbook:
+
+**1. Describe the goal, not the steps.** Tell the model what the final artifact is *for*, and the structural choices follow:
 
 | ❌ Stepwise | ✅ Goal-oriented |
 |---|---|
 | `draw a bar chart of 4 bars with values 10 20 30 40 colored blue` | `Create an infographic comparing Q1-Q4 revenue (10, 20, 30, 40 million yen) for a board deck. Clean dark tech aesthetic with neon blue accents. Include title, axis labels and value labels.` |
+
+**2. Iterate with small single-change refinements.** Quoting the Cookbook:
+
+> "Long prompts can work well, but debugging is easier when you start with a clean base prompt and refine with small, single-change follow-ups"
+> — [OpenAI Cookbook](https://developers.openai.com/cookbook/examples/multimodal/image-gen-models-prompting-guide)
+
+In practice: write the goal-oriented base prompt, generate once, then refine one thing at a time ("now make the bars thicker", "change the accent to orange") — don't rewrite the whole prompt. This is cheaper and far easier to debug than packing all adjustments into a single mega-prompt.
 
 ### Style by visual attributes, not proper nouns
 
@@ -202,7 +263,7 @@ Use `--quality low` ($0.006/image) while iterating; `medium` ($0.053) or `high` 
 | Use case | First choice | Reason |
 |---|---|---|
 | Posters with Japanese/kanji text | **ccskill-gptimage** | Strongest text rendering |
-| Business infographics | **ccskill-gptimage** | Agentic reasoning plans structure |
+| Business infographics | **ccskill-gptimage** | Strong instruction following + text layout |
 | Editing / partial modification | **ccskill-gptimage** | Always processes input at max fidelity |
 | Photo / illustration single visuals | Either | Comparable cost |
 | Transparent PNG (logos, icons, sprites) | Either | gpt-image-2 can't, but (a) `--model gpt-image-1.5`, (b) `rembg` post-processing, (c) ccskill-nanobanana all work |
