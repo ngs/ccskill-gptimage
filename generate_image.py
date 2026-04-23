@@ -14,6 +14,7 @@ OpenAI gpt-image-2 (ChatGPT Images 2.0) を使用して画像を生成・編集�
 
 import argparse
 import base64
+import contextlib
 import json
 import sys
 from datetime import datetime
@@ -232,20 +233,15 @@ def generate_image(
     )
 
     if reference_images:
-        files = [open(p, "rb") for p in reference_images]
-        edit_kwargs = dict(base_kwargs)
-        edit_kwargs["image"] = files if len(files) > 1 else files[0]
-        if mask:
-            edit_kwargs["mask"] = open(mask, "rb")
-        if input_fidelity:
-            edit_kwargs["input_fidelity"] = input_fidelity
-        try:
+        with contextlib.ExitStack() as stack:
+            files = [stack.enter_context(open(p, "rb")) for p in reference_images]
+            edit_kwargs = dict(base_kwargs)
+            edit_kwargs["image"] = files if len(files) > 1 else files[0]
+            if mask:
+                edit_kwargs["mask"] = stack.enter_context(open(mask, "rb"))
+            if input_fidelity:
+                edit_kwargs["input_fidelity"] = input_fidelity
             response = _call_image_edits(client, **edit_kwargs)
-        finally:
-            for f in files:
-                f.close()
-            if mask and "mask" in edit_kwargs:
-                edit_kwargs["mask"].close()
     else:
         response = _call_image_generations(client, **base_kwargs)
 
