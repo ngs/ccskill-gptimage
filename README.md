@@ -15,10 +15,6 @@ Sister skill: [ccskill-nanobanana](https://github.com/feedtailor/ccskill-nanoban
 - **Auto metadata sidecar** — prompt, `revised_prompt`, parameters saved as JSON
 - **Cost-aware defaults** — built-in knowledge that portrait `high` is cheaper than square `high`
 
-> **gpt-image-2 spec notes**:
-> - **`input_fidelity` is unnecessary** — gpt-image-2 always processes input images at maximum fidelity automatically. Specifying the parameter returns an error, but this is "always on", not "missing". Reference preservation is in fact strong; the trade-off is more input-image tokens (cost) when editing.
-> - **No transparent background**. If you need transparency: (a) post-process with `rembg` etc., (b) switch to `--model gpt-image-1.5`, or (c) use the sister skill [ccskill-nanobanana](https://github.com/feedtailor/ccskill-nanobanana).
-
 ## Examples
 
 A handful of one-shot examples, all generated at `--quality high` with **no regeneration and no human prompt-writing** (Claude composed the prompts from intent + SKILL.md). The full **24-image gallery** including a 3×3 resolution-quality cost grid is at [`docs/gallery.md`](docs/gallery.md) →
