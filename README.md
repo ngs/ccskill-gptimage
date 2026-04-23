@@ -17,13 +17,13 @@ Sister skill: [ccskill-nanobanana](https://github.com/feedtailor/ccskill-nanoban
 
 ## Examples
 
-A handful of one-shot examples, all generated at `--quality high` with **no regeneration and no human prompt-writing** (Claude composed the prompts from intent + SKILL.md). The full **24-image gallery** including a 3×3 resolution-quality cost grid is at [`docs/gallery.md`](docs/gallery.md) →
+A handful of one-shot examples, all generated at `--quality high` with **no regeneration and no human prompt-writing** (Claude composed the prompts from intent + SKILL.md). The full **35-image gallery** including a 3×3 resolution-quality cost grid is at [`docs/gallery.md`](docs/gallery.md) →
 
 <table>
 <tr>
   <td align="center" width="33%"><img src="assets/capability-survey/categories/01_photorealistic_portrait_woman.png" width="260" alt="Photoreal portrait"></td>
-  <td align="center" width="33%"><img src="assets/capability-survey/categories/10_architectural_render_modern_house.png" width="260" alt="Modern house render"></td>
-  <td align="center" width="33%"><a href="docs/gallery.md"><img src="assets/capability-survey/categories/03_watercolor_mountain_landscape.png" width="260" alt="See the full gallery"></a></td>
+  <td align="center" width="33%"><img src="assets/capability-survey/categories/19_urban_tokyo_rainy_night.png" width="260" alt="Tokyo rainy night"></td>
+  <td align="center" width="33%"><a href="docs/gallery.md"><img src="assets/capability-survey/categories/18_nature_volcanic_coast_dawn.png" width="260" alt="See the full gallery"></a></td>
 </tr>
 <tr>
   <td align="center" width="33%"><img src="assets/capability-survey/categories/04_isometric_3d_reading_room.png" width="260" alt="Isometric 3D reading room"></td>
@@ -32,7 +32,7 @@ A handful of one-shot examples, all generated at `--quality high` with **no rege
 </tr>
 </table>
 
-24/24 succeeded in one shot. Total cost for the entire survey: **¥570 ($3.76)**.
+35/35 succeeded in one shot. Total cost for the entire survey: **¥910 ($6.04)**.
 
 ## Setup
 
