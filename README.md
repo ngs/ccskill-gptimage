@@ -21,32 +21,14 @@ A handful of one-shot examples, all generated at `--quality high` with **no rege
 
 <table>
 <tr>
-  <td align="center" width="33%">
-    <img src="assets/capability-survey/categories/01_photorealistic_portrait_woman.png" width="260" alt="Photoreal portrait"><br>
-    <sub><b>Photoreal portrait</b><br>natural side light, editorial fashion magazine quality</sub>
-  </td>
-  <td align="center" width="33%">
-    <img src="assets/capability-survey/categories/10_architectural_render_modern_house.png" width="260" alt="Modern house render"><br>
-    <sub><b>Architectural exterior render</b><br>concrete + wood, golden hour, reflection pool</sub>
-  </td>
-  <td align="center" width="33%">
-    <a href="docs/gallery.md"><img src="assets/capability-survey/categories/03_watercolor_mountain_landscape.png" width="260" alt="See the full gallery"></a><br>
-    <sub><b><a href="docs/gallery.md">→ Full gallery (24 examples)</a></b><br>plus the 3×3 cost-vs-quality grid</sub>
-  </td>
+  <td align="center" width="33%"><img src="assets/capability-survey/categories/01_photorealistic_portrait_woman.png" width="260" alt="Photoreal portrait"></td>
+  <td align="center" width="33%"><img src="assets/capability-survey/categories/10_architectural_render_modern_house.png" width="260" alt="Modern house render"></td>
+  <td align="center" width="33%"><a href="docs/gallery.md"><img src="assets/capability-survey/categories/03_watercolor_mountain_landscape.png" width="260" alt="See the full gallery"></a></td>
 </tr>
 <tr>
-  <td align="center" width="33%">
-    <img src="assets/capability-survey/categories/04_isometric_3d_reading_room.png" width="260" alt="Isometric 3D reading room"><br>
-    <sub><b>Isometric 3D illustration</b><br>cozy reading nook, every prop and color as specified</sub>
-  </td>
-  <td align="center" width="33%">
-    <img src="assets/capability-survey/categories/14_japanese_poster_vertical_tategaki.png" width="260" alt="Vertical Japanese poster"><br>
-    <sub><b>Tategaki vertical Japanese poster</b><br>"未来は描かれるものではない、計画されるものだ。"</sub>
-  </td>
-  <td align="center" width="33%">
-    <img src="assets/capability-survey/categories/06_ui_mockup_settings_japanese.png" width="260" alt="iOS Settings UI in Japanese"><br>
-    <sub><b>iOS Settings UI in Japanese</b><br>pixel-perfect rows, SF-Symbol-style colored icons</sub>
-  </td>
+  <td align="center" width="33%"><img src="assets/capability-survey/categories/04_isometric_3d_reading_room.png" width="260" alt="Isometric 3D reading room"></td>
+  <td align="center" width="33%"><img src="assets/capability-survey/categories/14_japanese_poster_vertical_tategaki.png" width="260" alt="Vertical Japanese poster"></td>
+  <td align="center" width="33%"><img src="assets/capability-survey/categories/06_ui_mockup_settings_japanese.png" width="260" alt="iOS Settings UI in Japanese"></td>
 </tr>
 </table>
 
