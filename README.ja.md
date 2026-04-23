@@ -29,7 +29,7 @@ OpenAI **gpt-image-2** (ChatGPT Images 2.0) を使用した Claude Code 用画�
   <td align="center" width="33%"><a href="docs/gallery.md"><img src="assets/capability-survey/categories/18_nature_volcanic_coast_dawn.png" width="260" alt="フルギャラリーを見る"></a></td>
 </tr>
 <tr>
-  <td align="center" width="33%"><img src="assets/capability-survey/categories/04_isometric_3d_reading_room.png" width="260" alt="アイソメ 3D 室内"></td>
+  <td align="center" width="33%"><img src="assets/capability-survey/categories/24_line_drawing_fashion_sketch.png" width="260" alt="線画(ファッションスケッチ)"></td>
   <td align="center" width="33%"><img src="assets/capability-survey/categories/14_japanese_poster_vertical_tategaki.png" width="260" alt="日本語縦書きポスター"></td>
   <td align="center" width="33%"><img src="assets/capability-survey/categories/06_ui_mockup_settings_japanese.png" width="260" alt="日本語 iOS 設定 UI"></td>
 </tr>

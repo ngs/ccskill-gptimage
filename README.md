@@ -26,7 +26,7 @@ A handful of one-shot examples, all generated at `--quality high` with **no rege
   <td align="center" width="33%"><a href="docs/gallery.md"><img src="assets/capability-survey/categories/18_nature_volcanic_coast_dawn.png" width="260" alt="See the full gallery"></a></td>
 </tr>
 <tr>
-  <td align="center" width="33%"><img src="assets/capability-survey/categories/04_isometric_3d_reading_room.png" width="260" alt="Isometric 3D reading room"></td>
+  <td align="center" width="33%"><img src="assets/capability-survey/categories/24_line_drawing_fashion_sketch.png" width="260" alt="Fashion line drawing"></td>
   <td align="center" width="33%"><img src="assets/capability-survey/categories/14_japanese_poster_vertical_tategaki.png" width="260" alt="Vertical Japanese poster"></td>
   <td align="center" width="33%"><img src="assets/capability-survey/categories/06_ui_mockup_settings_japanese.png" width="260" alt="iOS Settings UI in Japanese"></td>
 </tr>
