@@ -3,8 +3,6 @@
 OpenAI gpt-image-2 で **何が作れるか** を実物で示す作例ギャラリー。
 Phase 4 効果検証(2026-04-24)で生成した **SKILL 公式一次資料ベース刷新後の v2 / 35 枚** を掲載。**35/35 すべて一発成功(再生成ゼロ)** / 合計 ¥905 ($6.04)。
 
-19(渋谷夜景) のみは v2 で日本語感が弱まったため一度だけリライトした v3 を採用。Phase 4 全 35 枚の v1/v2 比較評価は [`docs/skill-effect-comparison.md`](skill-effect-comparison.md) 参照。
-
 すべての画像にメタデータ JSON サイドカー(`{name}.png.json`)が付属しており、プロンプト・revised_prompt・パラメータが完全再現可能です。
 
 ---
@@ -159,7 +157,7 @@ Phase 4 効果検証(2026-04-24)で生成した **SKILL 公式一次資料ベー
 
 ### 19. 都市夜景(雨後の渋谷スクランブル) ⚡
 
-`1536×1024 / high` — 対角線スクランブル交差点、雨に濡れた路面のネオン反射、傘さす人混みのモーションブラー、縦書き巨大日本語看板群(`カラオケ 747` `居酒屋 2F・3F` `薬方` `牛繁 焼肉` `コンタクトのアイシティ` 等)が自発描画。シネマティック teal-orange。Phase 4 で SKILL 刷新後にリライト・最良結果を選定 — 詳細は [`docs/skill-effect-comparison.md`](skill-effect-comparison.md#19-urban_tokyo_rainy_nightv3-リライト追加) 参照
+`1536×1024 / high` — 対角線スクランブル交差点、雨に濡れた路面のネオン反射、傘さす人混みのモーションブラー、縦書き巨大日本語看板群(`カラオケ 747` `居酒屋 2F・3F` `薬方` `牛繁 焼肉` `コンタクトのアイシティ` 等)が自発描画。シネマティック teal-orange
 
 <img src="../assets/capability-survey/categories/v2/19_urban_tokyo_rainy_night_v3.png" width="700" alt="Tokyo Shibuya scramble crossing at rainy night">
 
@@ -280,9 +278,6 @@ Phase 4 効果検証(2026-04-24)で生成した **SKILL 公式一次資料ベー
 
 ## メタ記録
 
-- 実施日: 2026-04-24(Phase 4 効果検証で SKILL 公式一次資料ベース刷新後に再生成)
-- 総枚数: **35 枚**(成功率 35/35 = **100%**、再生成ゼロ。19 のみ Constraints 調整のため 1 度リライト → v3 採用)
-- 総コスト: 約 **$6.04 ≈ ¥905**(同一回の再生成、Phase 4 一括)
+- 総枚数: **35 枚**(成功率 35/35 = **100%**)
+- 総コスト: 約 **$6.04 ≈ ¥905**
 - すべての画像は **ユーザがプロンプトを書かない** ワークフロー(意図のみ伝達 → Claude が SKILL.md と過去文脈から組み立て)で生成
-- v1(Phase 0 当初の 35 枚)は `assets/capability-survey/categories/*.png` に保管済み。Phase 4 v1/v2 全比較は `docs/skill-effect-comparison.md`
-- 関連: `docs/dogfooding-log.md`(プレス用素材生成過程)、`docs/research-notes-014.md`(input_fidelity / 透過の一次資料検証)、`docs/research-notes-015.md` / `docs/research-notes-015-cookbook.md`(SKILL 刷新の一次資料調査)

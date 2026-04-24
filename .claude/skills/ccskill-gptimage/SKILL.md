@@ -170,7 +170,7 @@ Two prompt patterns for approach 1:
 - **Enumerate what to preserve** — list every visible element by name and quoted text. The more you name, the stronger the preservation.
 - **Replace only X** — `"Replace ONLY the map area with [fictional content]. Do not change any layout, font, color, or text outside the map rectangle."`
 
-Real-world validation: single `--reference --quality high` call replaced the map inside an Apple Business "lost mode location" screenshot with a fictional neighborhood while preserving surrounding UI down to device serial numbers. See `docs/dogfooding-log.md`.
+Real-world validation: single `--reference --quality high` call has been observed to replace a map area inside an Apple Business "lost mode location" screenshot with fictional content while preserving surrounding UI down to device serial numbers — small UI text at output resolution remains readable.
 
 ---
 
