@@ -3,23 +3,23 @@ name: ccskill-gptimage
 description: |
   Skill for image generation needs.
   Generate and edit high-quality images via OpenAI gpt-image-2 (ChatGPT Images 2.0).
-  Strong at multilingual text rendering (Japanese included), agentic visual reasoning,
-  reference-image fidelity, transparent PNG, and complex infographics.
+  Strong at multilingual text rendering (Japanese included), complex instruction following,
+  reference-image fidelity, and dense-text infographics.
 ---
 
 # ccskill-gptimage Image Generation Skill
 
 ## Overview
 
-This skill generates and edits images via OpenAI gpt-image-2. **The user only describes intent** — Claude composes the structured prompt, style hints and cost-optimized parameters from conversation history and project context. Sister skill: `ccskill-nanobanana` (Gemini 3 Pro Image); use them based on use case.
+Generates and edits images via OpenAI gpt-image-2. **The user only describes intent** — Claude composes the structured prompt, parameters, and cost-optimized choices from conversation and project context. Sister skill: `ccskill-nanobanana` (Gemini 3 Pro Image) — see the comparison table below.
 
 ## Prerequisites
 
-- Set `CCSKILL_GPTIMAGE_DIR` to this skill's repository path:
+- Set `CCSKILL_GPTIMAGE_DIR` to this skill's repo path:
   ```bash
   export CCSKILL_GPTIMAGE_DIR="$HOME/projects/ccskill-gptimage"
   ```
-- `OPENAI_API_KEY` must be set (or written into `$CCSKILL_GPTIMAGE_DIR/.env`)
+- `OPENAI_API_KEY` must be set (or put into `$CCSKILL_GPTIMAGE_DIR/.env`)
 - **The OpenAI Organization must be Verified** (unverified orgs get 403)
 
 ## Usage
@@ -34,150 +34,151 @@ $CCSKILL_GPTIMAGE_DIR/venv/bin/python $CCSKILL_GPTIMAGE_DIR/generate_image.py "p
 |---|---|---|---|
 | `--size` | Output size | `1024x1024` | `auto` / `1024x1024` / `1024x1536` (portrait) / `1536x1024` (landscape) |
 | `--quality` | Quality | `auto` | `auto` / `low` / `medium` / `high` |
-| `--background` | Background | `auto` | `auto` / `opaque` (use `--model gpt-image-1.5` for `transparent`) |
+| `--background` | Background | `auto` | `auto` / `opaque` (for `transparent` use `--model gpt-image-1.5`) |
 | `--output-format` | Output format | `png` | `png` / `jpeg` / `webp` |
 | `--output-compression` | Compression (jpeg/webp) | none | 0-100 |
 | `--output` | Output directory | `./generated_images` | any path |
-| `--output-name` | Output filename stem (extension auto from format) | timestamp | any string |
+| `--output-name` | Output filename stem (extension auto) | timestamp | any string |
 | `--reference` | Reference image (repeatable) | none | image file path |
-| `--mask` | Mask image (transparent area is editable; requires `--reference`) | none | image file path |
-| `--input-fidelity` | Not needed for gpt-image-2 (always max fidelity). For `gpt-image-1.5` | none | `high` / `low` |
+| `--mask` | Mask image (transparent area editable; requires `--reference`) | none | image file path |
+| `--input-fidelity` | Not needed for gpt-image-2 (auto max). Only for `gpt-image-1.5` | none | `high` / `low` |
 | `--moderation` | Moderation level | `auto` | `auto` / `low` |
 | `--model` | Model ID | `gpt-image-2` | any model ID |
 
-### Examples
+### Quick examples
 
-#### Basic
 ```bash
+# text-to-image (generation)
 $CCSKILL_GPTIMAGE_DIR/venv/bin/python $CCSKILL_GPTIMAGE_DIR/generate_image.py \
-  "A children's book illustration of a veterinarian listening to a baby otter's heartbeat"
-```
-
-#### Japanese poster
-```bash
-$CCSKILL_GPTIMAGE_DIR/venv/bin/python $CCSKILL_GPTIMAGE_DIR/generate_image.py \
-  "A minimalist editorial poster with the exact title \"腹落ちDMARC\" in large serif Japanese font at the top, dark navy background, subtle terminal motif" \
+  "A minimalist editorial poster with the exact title \"腹落ちDMARC\" in large serif Japanese font at the top, dark navy background" \
   --size 1024x1536 --quality high
+
+# reference editing
+$CCSKILL_GPTIMAGE_DIR/venv/bin/python $CCSKILL_GPTIMAGE_DIR/generate_image.py \
+  "Replace only the background with a neon Tokyo street at night. Preserve the person's face and pose exactly as in the reference." \
+  --reference ./portrait.png --quality high
 ```
 
-#### When you need transparency
+For **use-case–specific prompt patterns and complete examples**, see the [Use Case Index](#use-case-index) below — each use case points to a file under `prompts/` with Cookbook-sourced prompts you can reuse.
 
-gpt-image-2 has no transparent background support. Pick one of:
+---
 
-1. **Post-process with `rembg`** (recommended — keeps gpt-image-2's text rendering and layout strengths)
+## Prompt Design — 10 Principles (OpenAI Cookbook Section 2)
+
+Source: [GPT Image Generation Models Prompting Guide](https://developers.openai.com/cookbook/examples/multimodal/image-gen-models-prompting-guide) (retrieved 2026-04-23). Each principle below is a direct Cookbook recommendation; details and example prompts are in `prompts/*.md`.
+
+1. **Structure + Goal** — order as `background/scene → subject → key details → constraints`. Include the intended use (ad, UI mock, infographic) to set mode and polish.
+2. **Prompt Format** — paragraph / JSON / tag / bullets all work. Pick what's easiest to maintain.
+3. **Specificity + Quality Cues** — be concrete about materials, shapes, textures, medium. For photorealism, put `photorealistic` directly in the prompt.
+4. **Latency vs Fidelity** — start with `quality='low'` while iterating. For small text, infographics, close-up portraits, compare `medium`/`high` before shipping.
+5. **Composition** — specify framing (close-up, wide, top-down), angle (eye-level, low-angle), lighting (soft diffuse, golden hour), and placement (`logo top-right`, `subject centered`).
+6. **People, Pose, and Action** — describe scale, body framing, gaze, object interactions (e.g. `full body visible, feet included`, `looking down at the book, not at the camera`).
+7. **Constraints — what to change vs preserve** — state exclusions explicitly (`no watermark`, `no extra text`). For edits, say `change only X` + `keep everything else the same`, and repeat the preserve list each iteration.
+8. **Text in Images** — put literal strings in **quotes** or **ALL CAPS** + specify typography (font style, size, color, placement). For tricky words, spell letter-by-letter. Use `medium`/`high` for small text.
+9. **Multi-Image Inputs** — reference each input by **index + description** (`Image 1: product photo…, Image 2: style reference…`) and describe interaction (`apply Image 2's style to Image 1`).
+10. **Iterate Instead of Overloading** — start clean, refine with **small single-change follow-ups** (`make lighting warmer`, `remove the extra tree`) instead of mega-prompts.
+
+---
+
+## Use Case Index
+
+When the user's intent matches a row below, **read the linked file under `prompts/`** to get the Cookbook-sourced prompt pattern, parameters, and gpt-image-2-specific notes. Progressive disclosure: load only what you need.
+
+### Generation (text → image)
+
+| Intent | Prompt guide | Recommended params |
+|---|---|---|
+| Infographic / diagram / pitch deck slide / chart | [`prompts/infographics-and-diagrams.md`](prompts/infographics-and-diagrams.md) | `1024x1536` or `1536x1024`, `high` |
+| Photorealistic candid / historical scene | [`prompts/photorealism.md`](prompts/photorealism.md) | `1024x1536`, `medium`–`high` |
+| Logo / brand mark | [`prompts/logo.md`](prompts/logo.md) | `1024x1024`, `high` |
+| Ad / marketing visual / text-in-image | [`prompts/ads-and-marketing.md`](prompts/ads-and-marketing.md) | `1024x1536`, `high` |
+| Comic strip / storyboard | [`prompts/comic-and-storyboard.md`](prompts/comic-and-storyboard.md) | `1024x1536`, `high` |
+| Mobile / Web UI mockup | [`prompts/ui-mockups.md`](prompts/ui-mockups.md) | portrait for mobile, landscape for web, `high` |
+| Character consistency / concept art / keepsake | [`prompts/character-and-concept.md`](prompts/character-and-concept.md) | `1024x1536`, `medium`–`high` |
+
+### Editing (text + image → image)
+
+| Intent | Prompt guide | Notes |
+|---|---|---|
+| Translate in-image text to another language | [`prompts/image-translation.md`](prompts/image-translation.md) | Preserves layout/typography |
+| Apply style from a reference to new content | [`prompts/style-transfer.md`](prompts/style-transfer.md) | 1 reference |
+| Virtual clothing try-on (identity preserved) | [`prompts/try-on.md`](prompts/try-on.md) | Up to 5 references |
+| Sketch → photorealistic render | [`prompts/sketch-to-render.md`](prompts/sketch-to-render.md) | 1 reference |
+| Product extraction / interior object swap | [`prompts/product-mockup.md`](prompts/product-mockup.md) | `--background opaque` |
+| Weather/lighting transform / object removal | [`prompts/scene-transform.md`](prompts/scene-transform.md) | 1 reference |
+| Insert person / multi-image composite | [`prompts/scene-composite.md`](prompts/scene-composite.md) | 1–5 references |
+
+See [`prompts/README.md`](prompts/README.md) for the full catalog and cross-references.
+
+---
+
+## gpt-image-2 specific constraints (memorize these)
+
+These apply to **every** use case and are critical context when composing prompts.
+
+### No transparent background
+
+`--background transparent` returns 400. To produce transparent PNG, pick one of:
+
+1. **Post-process with `rembg`** (recommended — preserves gpt-image-2's text-rendering and layout strengths):
    ```bash
-   $CCSKILL_GPTIMAGE_DIR/venv/bin/python $CCSKILL_GPTIMAGE_DIR/generate_image.py "minimalist fox logo on plain white background"
+   $CCSKILL_GPTIMAGE_DIR/venv/bin/python $CCSKILL_GPTIMAGE_DIR/generate_image.py "... on plain white background"
    rembg i generated_images/<image>.png generated_images/<image>_alpha.png
    ```
-2. **Switch to `gpt-image-1.5`** (the older model that still supports transparency)
-   ```bash
-   $CCSKILL_GPTIMAGE_DIR/venv/bin/python $CCSKILL_GPTIMAGE_DIR/generate_image.py \
-     "minimalist fox logo, flat vector, navy and gold" \
-     --model gpt-image-1.5 --background transparent --output-format png
-   ```
-3. **Use the sister skill `ccskill-nanobanana`**
+2. **Switch to `gpt-image-1.5`** (supports `--background transparent` natively)
+3. **Use `ccskill-nanobanana`**
 
-#### Reference editing
-```bash
-$CCSKILL_GPTIMAGE_DIR/venv/bin/python $CCSKILL_GPTIMAGE_DIR/generate_image.py \
-  "Place the same fox logo on a deep navy background with subtle gold sparkles, ready for use as a hero image. Preserve the fox's pose and proportions from the reference." \
-  --reference ./logo.png --quality medium
-```
+### `input_fidelity` is unnecessary (auto max fidelity)
 
-> **About reference fidelity**: gpt-image-2 always processes input images at maximum fidelity automatically — `input_fidelity` is unnecessary (specifying it returns 400). This is a feature, not a missing parameter: reference preservation is in fact strong. Just spell out what to "Preserve … from the reference" in the prompt. The trade-off: input-image tokens add up when editing, so **don't pass unnecessary references**.
+gpt-image-2 **always processes input images at maximum fidelity automatically**. Specifying `--input-fidelity` returns 400. This is a feature, not a missing parameter — reference preservation is in fact strong. Just write explicit `Preserve …` clauses in the prompt.
 
-#### Multi-reference composition
-```bash
-$CCSKILL_GPTIMAGE_DIR/venv/bin/python $CCSKILL_GPTIMAGE_DIR/generate_image.py \
-  "Photorealistic gift basket on white, labeled 'Relax & Unwind', containing all items" \
-  --reference ./body-lotion.png --reference ./bath-bomb.png --reference ./soap.png
-```
+> **Note**: The Cookbook's edit-chapter examples (5.6, 5.7, 5.8, 5.9) show `input_fidelity="high"` in their parameter blocks. **Do not carry this parameter over when using gpt-image-2** — this skill's CLI validator strips it automatically if provided, but cleaner to omit it from prompts/scripts altogether.
 
-#### Mask inpainting
-```bash
-$CCSKILL_GPTIMAGE_DIR/venv/bin/python $CCSKILL_GPTIMAGE_DIR/generate_image.py \
-  "A sunlit indoor lounge area with a pool containing a flamingo" \
-  --reference ./lounge.png --mask ./mask.png
-```
+Trade-off: input-image tokens grow with auto-max-fidelity, so **don't pass unnecessary references** — it costs more.
 
-> The transparent area of the mask is what gets replaced. The prompt must describe the **complete final image**, not just the masked region.
+### Edit API always regenerates the full canvas
 
-#### Editing only a small region (e.g. anonymizing a screenshot)
+Even with a mask, gpt-image-2's edit endpoint re-renders every pixel. Cookbook quote:
 
-The OpenAI guide is explicit: *"Masking with GPT Image is entirely prompt-based. The model uses the mask as guidance, but may not follow its exact shape with complete precision."* In practice **the edits API always regenerates the full canvas** — even with a mask, every pixel is re-rendered. Pick the right strategy:
+> "Masking with GPT Image is entirely prompt-based. The model uses the mask as guidance, but may not follow its exact shape with complete precision."
+
+The auto-max-fidelity typically preserves non-target regions down to UI text and serial numbers — but it's not pixel-perfect. See [Local editing strategy](#local-editing-strategy) below for when this matters.
+
+### Other constraints
+
+- **Organization Verification required** (unverified → 403)
+- **Rate limits**: Tier 1 = 5 IPM (production needs Tier 3+)
+- **Timeout**: up to 2 min for high-quality/complex prompts — set SDK timeout ≥ 120 s
+- **Response**: `b64_json` only (no URLs)
+- **Not supported**: function calling, structured outputs
+- **Resolution**: per Cookbook, gpt-image-2 supports "any resolution per constraints"; this skill's CLI currently restricts to 4 sizes — `auto / 1024x1024 / 1024x1536 / 1536x1024`. Cookbook occasionally uses `1536x864` (16:9); use `1536x1024` as the nearest skill-supported landscape.
+
+---
+
+## Local editing strategy
+
+When the user wants to edit only a small region of an existing image (e.g. anonymize a map inside a UI screenshot), choose based on how strictly the surroundings must stay:
 
 | Goal | Recommended approach |
 |---|---|
-| Replace one region, accept that the rest is **redrawn at very high fidelity but is no longer pixel-identical** (UI text/serial numbers etc. usually survive thanks to "always max fidelity") | `--reference` + a strong `Preserve absolutely everything else exactly as in the reference: …` prompt that **enumerates the surrounding elements** (sidebar items, headers, dates, button labels, logos, etc.). This is often more than good enough for blogs / docs |
-| **Pixel-perfect** preservation outside the edited region (e.g. legal evidence, regulated screenshots) | **Hybrid: crop → edit → paste back** with Pillow / ImageMagick. gpt-image-2 only edits the cropped tile; the rest of the original is untouched at the bit level |
-| Composite multiple references | `--reference a.png --reference b.png …` (no mask) and write a goal-oriented prompt |
+| Replace one region; surroundings redrawn at very high fidelity but not pixel-identical (UI text usually survives) | `--reference` + strong `Preserve absolutely everything else exactly as in the reference: …` prompt that **enumerates** the surrounding elements (headers, dates, button labels, logos, quoted text). Often good enough for blogs / docs. |
+| **Pixel-perfect** preservation outside the edited region (legal evidence, regulated screenshots) | **Hybrid: crop → edit → paste back** with Pillow / ImageMagick. gpt-image-2 only edits the cropped tile; the rest is untouched bit-for-bit. |
+| Composite from multiple images | `--reference a.png --reference b.png …` (no mask) + goal-oriented prompt. See `prompts/scene-composite.md`. |
 
-For approach 1, two prompt patterns work well:
+Two prompt patterns for approach 1:
 
-- **Enumerate what to preserve**: list every visible element by name and quoted text — `"the dialog header '所在地を表示', the date 'これは…の最後の位置情報です。', the '閉じる' button, the central green location dot, ..."`. The more you name, the stronger the preservation.
-- **Replace only X**: `"Replace ONLY the map area with [fictional content]. Do not change any layout, font, color, or text outside the map rectangle."`
+- **Enumerate what to preserve** — list every visible element by name and quoted text. The more you name, the stronger the preservation.
+- **Replace only X** — `"Replace ONLY the map area with [fictional content]. Do not change any layout, font, color, or text outside the map rectangle."`
 
-Real-world example (anonymizing the map inside an Apple Business "lost mode location" screenshot): a single `--reference --quality high` call replaced the map (street pattern, river, route number, real POI labels) with a fictional neighborhood while preserving the surrounding UI down to device serial numbers. Output resolution was 1536×1024 (down from 2000×1305) — small UI text was redrawn but readable. See `docs/dogfooding-log.md`.
+Real-world validation: single `--reference --quality high` call replaced the map inside an Apple Business "lost mode location" screenshot with a fictional neighborhood while preserving surrounding UI down to device serial numbers. See `docs/dogfooding-log.md`.
 
-## Prompt Design Guide (gpt-image-2 best practices)
+---
 
-> Sources: [OpenAI Image generation guide](https://developers.openai.com/api/docs/guides/image-generation), [gpt-image-2 model page](https://developers.openai.com/api/docs/models/gpt-image-2)
+## Cost optimization
 
-gpt-image-2 is the **first agentic image generation model**: it actively researches, plans and reasons about structure before generating. Prompts written like a creative director's brief work best — not tag-soup.
+Iterate with `--quality low` ($0.006/image). Ship with `medium` ($0.053) or `high` ($0.211).
 
-### Structured prompt template
-
-```
-[Subject] / [Style] / [Composition] / [Lighting] / [Details] / [Constraints]
-```
-
-### Text rendering (gpt-image-2's flagship strength)
-
-Wrap any text you want rendered in **strict quotation marks**:
-
-```
-...poster with the exact title "腹落ちDMARC" in large serif Japanese font at the top,
-and the subtitle "Email Authentication for SaaS" in smaller English sans-serif below.
-```
-
-Multilingual text (especially Japanese kanji/kana and emoji) is dramatically improved over previous generations.
-
-### Use positive form, not negation
-
-| ❌ | ✅ |
-|---|---|
-| `a room without furniture` | `an empty room with bare walls and polished concrete floor` |
-
-### When editing, name what to keep
-
-```
-Preserve the woman's face, hair, and pose exactly as in the reference.
-Replace only the background with a neon Tokyo street at night.
-```
-
-> gpt-image-2 always processes input images at maximum fidelity, so `input_fidelity` is unnecessary (and rejected by the API). The combination of automatic high fidelity + explicit "Preserve …" wording yields strong reference preservation.
-
-### Goal-oriented prompts beat step-by-step instructions
-
-Because gpt-image-2 plans internally, telling it the **goal** outperforms scripting the steps:
-
-| ❌ Stepwise | ✅ Goal-oriented |
-|---|---|
-| `draw a bar chart of 4 bars with values 10 20 30 40 colored blue` | `Create an infographic comparing Q1-Q4 revenue (10, 20, 30, 40 million yen) for a board deck. Clean dark tech aesthetic with neon blue accents. Include title, axis labels and value labels.` |
-
-### Style by visual attributes, not proper nouns
-
-Avoid copyrighted style names. Use `hand-painted watercolor, soft pastel palette, cel-shaded` rather than `Studio Ghibli style`.
-
-### Observe `revised_prompt`
-
-Responses may include a `revised_prompt` (the model's own paraphrase). This skill prints it as `[Revised] ...` and saves it to the metadata sidecar. Use it as a feedback signal to refine the next prompt.
-
-## Cost Optimization
-
-Use `--quality low` ($0.006/image) while iterating; `medium` ($0.053) or `high` ($0.211) for delivery.
-
-**Counter-intuitive**: `1024×1536` (portrait) at `high` is **$0.165** — *cheaper* than `1024×1024` at `high` ($0.211). Pick portrait whenever the use case allows.
+**Counter-intuitive**: portrait `1024×1536` at `high` is **$0.165** — *cheaper* than square `1024×1024` at `high` ($0.211). Prefer portrait whenever the use case allows.
 
 | Quality | 1024×1024 | 1024×1536 | 1536×1024 |
 |---|---|---|---|
@@ -185,47 +186,32 @@ Use `--quality low` ($0.006/image) while iterating; `medium` ($0.053) or `high` 
 | medium | $0.053 | $0.080 | $0.079 |
 | high | $0.211 | **$0.165** | $0.210 |
 
-## Use case → parameter table
-
-| Intent | size | quality | background | output-format | Notes |
-|---|---|---|---|---|---|
-| Blog/article hero | `1024x1536` | `medium` | `auto` | `webp` (compression 80) | Portrait reads better |
-| OGP/social banner | `1536x1024` | `high` | `auto` | `png` | Sharp text |
-| Icon/logo (transparency required) | `1024x1024` | `high` | — | `png` | Generate with gpt-image-2 → `rembg`, or use `--model gpt-image-1.5 --background transparent` |
-| Logo (solid background OK) | `1024x1024` | `high` | `auto` | `png` | Cut out background later if needed |
-| Infographic | `1024x1536` | `high` | `auto` | `png` | Lots of text; goal-oriented prompt |
-| Iterating | `1024x1024` | `low` | `auto` | `png` | Cost control |
-| Edit existing | match reference | `high` | `auto` | match reference | `--reference` + spell out what to preserve |
+---
 
 ## Sister skill comparison
 
 | Use case | First choice | Reason |
 |---|---|---|
 | Posters with Japanese/kanji text | **ccskill-gptimage** | Strongest text rendering |
-| Business infographics | **ccskill-gptimage** | Agentic reasoning plans structure |
-| Editing / partial modification | **ccskill-gptimage** | Always processes input at max fidelity |
+| Business infographics / pitch slides | **ccskill-gptimage** | Strong instruction following + text layout |
+| Editing / partial modification | **ccskill-gptimage** | Auto max input fidelity |
 | Photo / illustration single visuals | Either | Comparable cost |
-| Transparent PNG (logos, icons, sprites) | Either | gpt-image-2 can't, but (a) `--model gpt-image-1.5`, (b) `rembg` post-processing, (c) ccskill-nanobanana all work |
+| Transparent PNG (logos, icons, sprites) | Either | gpt-image-2 can't natively, but (a) `--model gpt-image-1.5`, (b) `rembg` post-processing, (c) ccskill-nanobanana all work |
 | 4K output | ccskill-nanobanana | gpt-image-2 caps at 2K |
 
-## Output files
+---
 
-Each image is saved alongside a **metadata JSON sidecar** (`{name}.{ext}.json`) containing the prompt, `revised_prompt`, parameters and timestamp — useful for reproduction and refinement.
+## Output
 
-## Constraints
+Each image is saved alongside a **metadata JSON sidecar** (`{name}.{ext}.json`) containing the prompt, `revised_prompt`, parameters, and timestamp — useful for reproduction and refinement.
 
-- **Organization Verification required**
-- **No transparent background** (`background: transparent` returns 400). Use `--model gpt-image-1.5` or `rembg` post-processing.
-- **`input_fidelity` is unnecessary (always max fidelity)** — specifying returns 400, but this is "always on", not "missing"
-- Editing with reference images uses more input-image tokens (trade-off of automatic max fidelity)
-- Rate limits: Tier 1 = 5 IPM (production needs Tier 3+)
-- Timeout: up to 2 minutes for high quality / complex prompts
-- No function calling, no structured outputs
-- Response is `b64_json` only (no URLs)
+`revised_prompt`: gpt-image-2 may return a paraphrased prompt. This skill prints it as `[Revised] ...` and saves it to the sidecar. Use it as a signal to refine follow-up prompts.
 
 ## Troubleshooting
 
-- 403 Forbidden → check Org Verification
-- Rate limit → upgrade tier or use `--quality low` while iterating
-- Timeout → check network; set SDK timeout ≥ 120 s
-- Japanese text broken → wrap exactly in quotes; specify font (e.g. `serif Japanese font`)
+- **403 Forbidden** → check Org Verification
+- **Rate limit** → upgrade tier or use `--quality low` while iterating
+- **Timeout** → check network; set SDK timeout ≥ 120 s
+- **Japanese text broken** → wrap in quotes; specify font (`serif Japanese font`); use `quality=high`
+- **400 on `--input-fidelity`** → omit it (gpt-image-2 auto max fidelity); only valid for `--model gpt-image-1.5`
+- **400 on `--background transparent`** → see [transparent section](#no-transparent-background)
