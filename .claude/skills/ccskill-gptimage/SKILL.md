@@ -162,6 +162,7 @@ When the user wants to edit only a small region of an existing image (e.g. anony
 | Goal | Recommended approach |
 |---|---|
 | Replace one region; surroundings redrawn at very high fidelity but not pixel-identical (UI text usually survives) | `--reference` + strong `Preserve absolutely everything else exactly as in the reference: …` prompt that **enumerates** the surrounding elements (headers, dates, button labels, logos, quoted text). Often good enough for blogs / docs. |
+| Re-render only one small area; other areas should be left as-is, but the model has a strong visual bias on the target area | `--reference` + `--mask` (see "Mask edit" below). Mask shape is **soft guidance**, not strict — but localizing the model's attention often improves the chance of overriding interpretation bias on small ambiguous objects. |
 | **Pixel-perfect** preservation outside the edited region (legal evidence, regulated screenshots) | **Hybrid: crop → edit → paste back** with Pillow / ImageMagick. gpt-image-2 only edits the cropped tile; the rest is untouched bit-for-bit. |
 | Composite from multiple images | `--reference a.png --reference b.png …` (no mask) + goal-oriented prompt. See `prompts/scene-composite.md`. |
 
@@ -171,6 +172,29 @@ Two prompt patterns for approach 1:
 - **Replace only X** — `"Replace ONLY the map area with [fictional content]. Do not change any layout, font, color, or text outside the map rectangle."`
 
 Real-world validation: single `--reference --quality high` call has been observed to replace a map area inside an Apple Business "lost mode location" screenshot with fictional content while preserving surrounding UI down to device serial numbers — small UI text at output resolution remains readable.
+
+### Mask edit — focused regeneration of a small region
+
+Pass an alpha-channel PNG with `--mask`. Transparent pixels (`alpha = 0`) are the **editable region**, opaque pixels are protected. Per the OpenAI Cookbook:
+
+> "Masking with GPT Image is entirely prompt-based. The model uses the mask as guidance, but may not follow its exact shape with complete precision."
+
+This means:
+- The mask **does not strictly protect** pixels outside the transparent region — but in practice, opaque areas are kept very close to the input
+- The mask **does help focus** the model's attention to the editable region, often overriding visual interpretation bias on the target area
+- Effects are **not guaranteed** — masks may improve a stubborn small-region issue, or may not
+
+#### Workflow recommendation
+
+Mask creation is **outside this skill's scope** — produce the mask using your favorite image editor (Pixelmator / Photoshop / GIMP / Preview is generally too limited). Iterate with cheap quality first:
+
+1. **Mask creation** — open the base image in an image editor, fill the editable area with full transparency (alpha = 0), keep the rest fully opaque, export as PNG with the same dimensions as the base
+2. **Try cheaply** — run `--mask <mask.png> --reference <base.png> --quality low` (or `medium`) a few times with different prompts. Cost ¥1–¥12 per try
+3. **Promote winners to high** — when an iteration looks promising, re-run with `--quality high` for the final asset, or pass the chosen iteration as a new `--reference` for further refinement
+
+#### Real-world validation
+
+Replacing a small ambiguous foreground object (a Japanese ceramic chopstick rest that gpt-image-2 kept misinterpreting as fork prongs in 4 successive `--reference`-only edits) was visibly improved by adding `--mask` over that region. Result was not perfect but moved clearly toward the intended ceramic shape — confirming masks are useful for **breaking through stubborn interpretation bias on small regions**, even if not pixel-precise.
 
 ---
 
