@@ -8,10 +8,12 @@ Sister skill: [ccskill-nanobanana](https://github.com/feedtailor/ccskill-nanoban
 
 ## Features
 
+- **🆕 No API key needed** — with a ChatGPT subscription and [Codex CLI](https://github.com/openai/codex), call gpt-image-2 without `OPENAI_API_KEY` (`--backend codex`). Verified: 35 high-quality images in one session without hitting the subscription cap ([comparison](docs/codex-vs-api-comparison.md))
 - **Multilingual text rendering** — Japanese (kanji/kana) + emoji posters and banners come out readable in one shot
 - **Agentic reasoning** — first agentic image generation model; plans structure before drawing
 - **Reference-image editing** — base new images on existing ones via `--reference`
-- **Mask editing (inpainting)** — replace parts of existing images
+- **Mask editing (inpainting)** — replace parts of existing images (requires `--backend api`)
+- **Two backends with auto fallback (`--backend auto`)** — prefers Codex when available, falls back to API on failure
 - **Auto metadata sidecar** — prompt, `revised_prompt`, parameters saved as JSON
 - **Cost-aware defaults** — built-in knowledge that portrait `high` is cheaper than square `high`
 
