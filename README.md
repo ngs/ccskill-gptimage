@@ -55,17 +55,21 @@ This skill runs on either of two backends.
 
 If both are available, `--backend auto` (default) prefers Codex and falls back to API on failure.
 
-### 1. Clone
+### 1. Clone the repository
+Clone anywhere you prefer.
 
 ```bash
 cd /path/to/projects
 git clone https://github.com/feedtailor/ccskill-gptimage.git
-cd ccskill-gptimage
 ```
 
-### 2. Set up your backend
+### 2. Set up the backend
 
-**Option A (Codex CLI):**
+Make gpt-image-2 available. There are two options — Option A is recommended.
+
+**A: Use the Codex CLI**
+
+(Skip this if you already have the Codex CLI linked to your ChatGPT subscription.)
 
 ```bash
 # Install Codex CLI (Homebrew)
@@ -76,13 +80,14 @@ codex login
 cat ~/.codex/auth.json | python -c "import sys,json;print('OK' if json.load(sys.stdin).get('tokens',{}).get('access_token') else 'NG')"
 ```
 
-**Option B (API key):**
+**B: Use an API key**
 
-1. Issue a key at [OpenAI Platform](https://platform.openai.com/api-keys)
-2. Confirm your Organization is **Verified** (Settings → General → Verifications)
-3. Billing must be enabled (`gpt-image-2` has no free tier)
+Using gpt-image-2 requires billing to be enabled. Do the following:
 
-### 3. Configure environment (Option B only)
+- Issue an API key at [OpenAI Platform](https://platform.openai.com/api-keys)
+- Set your Organization to **Verified** status<br>(Settings → General → Verifications)
+
+### 3. Set the API key environment variable (Option B only)
 
 ```bash
 cp .env.example .env
@@ -102,33 +107,45 @@ source venv/bin/activate
 python -m pip install -r requirements.txt
 ```
 
-### 5. Set environment variable (when used as a skill)
+### 5. Set the skill path environment variable
 
-Add to `.bashrc` / `.zshrc`:
+Add the following to `.bashrc` / `.zshrc`:
+
 ```bash
 export CCSKILL_GPTIMAGE_DIR="/path/to/ccskill-gptimage"
 ```
 
-## Use as a Claude Code skill
-
-This repository is distributed as a Claude Code skill. Drop a symlink into the target project's `.claude/skills/` directory and Claude Code will automatically invoke this skill whenever image generation is needed.
+## Usage
+First, create a symbolic link under your target project's `.claude/skills/` directory.
 
 ```bash
-mkdir -p /path/to/your-project/.claude/skills
+# Create .claude/skills under your project if it doesn't exist
+cd /path/to/your-project/
+mkdir -p .claude/skills
 
-ln -s $CCSKILL_GPTIMAGE_DIR/.claude/skills/ccskill-gptimage \
-      /path/to/your-project/.claude/skills/ccskill-gptimage
+# Create the symbolic link so the skill is recognized
+ln -s $CCSKILL_GPTIMAGE_DIR/.claude/skills/ccskill-gptimage .claude/skills/ccskill-gptimage
 ```
 
-`git pull` in this repository auto-updates the skill in every linked project.
+In Claude Code, just ask for image generation with gpt-image-2, or invoke the skill explicitly by typing `/ccskill-gptimage` in your prompt.
 
-When invoked through the skill, users don't need to write prompts: Claude Code composes the optimal prompt from the conversation context and project information, and picks appropriate `--size` / `--quality` / `--backend` for the task.
+You don't need to write a detailed prompt yourself — Claude Code composes the optimal prompt from the conversation context and project information, and picks appropriate options for the task.
+
+
+## Updating
+Run `git pull` where you cloned this skill:
+
+```bash
+cd $CCSKILL_GPTIMAGE_DIR
+git pull
+```
 
 ## Using the CLI standalone
 
-You can also call `generate_image.py` directly as a CLI, without going through the skill.
+You can also use this as an image generation CLI, without going through the Claude Code skill.
 
 ```bash
+cd $CCSKILL_GPTIMAGE_DIR
 source venv/bin/activate
 python generate_image.py "a coastal sunset"
 ```
@@ -190,16 +207,6 @@ Each image is saved with a **metadata JSON sidecar** (`{name}.{ext}.json`) for r
 - **Max resolution**: 2K
 - **Endpoints**: `/v1/images/generations`, `/v1/images/edits`
 - **Filename**: timestamp form (e.g. `20260423_153045.png`)
-
-## Sister-skill comparison: `ccskill-nanobanana`
-
-| Use case | First choice | Why |
-|---|---|---|
-| Posters with Japanese/kanji text | **ccskill-gptimage** | gpt-image-2's text rendering is advantageous |
-| Business infographics | **ccskill-gptimage** | Agentic reasoning plans structure |
-| Editing / partial modification | **ccskill-gptimage** | Always processes input at max fidelity |
-| Transparent PNG (logos, icons, sprites) | Either | gpt-image-2 can't, but `--model gpt-image-1.5` can. `rembg` post-processing also works. |
-| 4K output | **ccskill-nanobanana** | gpt-image-2 caps at 2K |
 
 ## Troubleshooting
 
