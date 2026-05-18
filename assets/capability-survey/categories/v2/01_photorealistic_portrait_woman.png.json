@@ -1,7 +1,7 @@
 {
   "model": "gpt-image-2",
-  "prompt": "Editorial fashion magazine portrait (intended use).\nScene: a warm beige room with a large window on the right, soft natural side light, creamy background bokeh.\nSubject: photorealistic Japanese woman in her late twenties, head-and-shoulders crop, looking slightly off-camera with a gentle relaxed expression.\nKey details: cream knit sweater, fine realistic skin texture with subtle pores, natural minimal makeup, shallow depth of field, 50mm lens look, natural color grading.\nConstraints: no watermark, no extra text, no logos, no heavy retouching.",
-  "size": "1024x1024",
+  "prompt": "Editorial portrait photograph for a Japanese lifestyle magazine (Kinfolk / IMA / & Premium look). Vertical 3:2 portrait composition.\n\nSubject: a Japanese woman in her late twenties, head-and-upper-chest crop slightly off-center to the right of frame, gaze cast softly past the camera into middle distance, lips relaxed and barely parted, no posed smile, natural breath. Individual hair strands visible at the edges with subtle flyaways; medium-length dark brown hair with natural movement, not styled stiff.\n\nScene: a quiet warm beige room in late morning, a large soft north-facing window just out of frame to the right backlighting her hair into a delicate rim, a subtle silver reflector bouncing light back onto her left cheek; warm cream wall and a barely-visible woven curtain in defocused background, gentle creamy bokeh.\n\nPhotographic specifics: 85mm portrait lens look, f/1.8 aperture, eyes tack-sharp with a clear catchlight in the right eye, shallow depth of field, color temperature around 4500K, low-contrast editorial color grade with warm highlights and slightly desaturated shadows, fine natural film grain.\n\nSkin and texture: natural pore detail and faint downy facial hair visible, subtle uneven undertones, no skin smoothing, no AI-style sheen, no plasticky highlights, no perfect symmetry; minimal natural makeup, soft matte lipstick.\n\nWardrobe: cream chunky knit wool sweater with visible yarn texture and slight pilling.\n\nConstraints: no watermark, no extra text, no logos, no heavy retouching, no oversaturated colors, no studio backdrop, no fake bokeh halos.",
+  "size": "1024x1536",
   "quality": "high",
   "background": "auto",
   "output_format": "png",
@@ -10,5 +10,6 @@
   "mask": null,
   "input_fidelity": null,
   "revised_prompt": null,
-  "timestamp": "2026-04-23T23:01:03.864272"
+  "backend": "codex",
+  "timestamp": "2026-05-18T13:56:41.694493"
 }
