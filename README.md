@@ -109,9 +109,24 @@ Add to `.bashrc` / `.zshrc`:
 export CCSKILL_GPTIMAGE_DIR="/path/to/ccskill-gptimage"
 ```
 
-## Usage
+## Use as a Claude Code skill
 
-### Direct CLI
+This repository is distributed as a Claude Code skill. Drop a symlink into the target project's `.claude/skills/` directory and Claude Code will automatically invoke this skill whenever image generation is needed.
+
+```bash
+mkdir -p /path/to/your-project/.claude/skills
+
+ln -s $CCSKILL_GPTIMAGE_DIR/.claude/skills/ccskill-gptimage \
+      /path/to/your-project/.claude/skills/ccskill-gptimage
+```
+
+`git pull` in this repository auto-updates the skill in every linked project.
+
+When invoked through the skill, users don't need to write prompts: Claude Code composes the optimal prompt from the conversation context and project information, and picks appropriate `--size` / `--quality` / `--backend` for the task.
+
+## Using the CLI standalone
+
+You can also call `generate_image.py` directly as a CLI, without going through the skill.
 
 ```bash
 source venv/bin/activate
@@ -166,21 +181,6 @@ Each image is saved with a **metadata JSON sidecar** (`{name}.{ext}.json`) for r
   "timestamp": "2026-04-23T10:00:00"
 }
 ```
-
-## Use as a Claude Code skill
-
-### Install into another project
-
-```bash
-mkdir -p /path/to/your-project/.claude/skills
-
-ln -s $CCSKILL_GPTIMAGE_DIR/.claude/skills/ccskill-gptimage \
-      /path/to/your-project/.claude/skills/ccskill-gptimage
-```
-
-Claude Code will auto-discover and use this skill whenever image generation is needed. `git pull` here updates every linked project.
-
-
 
 ## Specs
 

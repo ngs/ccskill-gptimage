@@ -108,9 +108,24 @@ python -m pip install -r requirements.txt
 export CCSKILL_GPTIMAGE_DIR="/path/to/ccskill-gptimage"
 ```
 
-## 使い方
+## Claude Code スキルとして使用
 
-### コマンドラインから直接実行
+このリポジトリ自体が Claude Code 用のスキルとして配布されています。利用したいプロジェクトの `.claude/skills/` 配下にシンボリックリンクで配置するだけで、Claude Code が画像生成を必要とする場面で自動的にこのスキルを呼び出します。
+
+```bash
+mkdir -p /path/to/your-project/.claude/skills
+
+ln -s $CCSKILL_GPTIMAGE_DIR/.claude/skills/ccskill-gptimage \
+      /path/to/your-project/.claude/skills/ccskill-gptimage
+```
+
+本体リポジトリで `git pull` すれば、リンク先プロジェクトの参照スキルも自動更新されます。
+
+スキルを通して呼ばれた場合、ユーザがプロンプトを書かなくても、Claude Code が会話文脈やプロジェクト内の情報から最適なプロンプトを組み立て、適切な `--size` / `--quality` / `--backend` を選んで画像を生成します。
+
+## コマンドラインから単体で使う場合
+
+スキル経由ではなく、`generate_image.py` を CLI として直接呼ぶこともできます。
 
 ```bash
 source venv/bin/activate
@@ -165,23 +180,6 @@ python generate_image.py "A sunlit indoor lounge with a pool" --reference ./loun
   "timestamp": "2026-04-23T10:00:00"
 }
 ```
-
-## Claude Code スキルとして使用
-
-### 他のプロジェクトへのインストール
-
-シンボリックリンクで配置:
-
-```bash
-mkdir -p /path/to/your-project/.claude/skills
-
-ln -s $CCSKILL_GPTIMAGE_DIR/.claude/skills/ccskill-gptimage \
-      /path/to/your-project/.claude/skills/ccskill-gptimage
-```
-
-これで Claude Code から画像生成が必要な場面でこのスキルが自動利用されます。リポジトリを `git pull` すれば、リンク先プロジェクトの参照スキルも自動更新されます。
-
-
 
 ## 仕様
 
