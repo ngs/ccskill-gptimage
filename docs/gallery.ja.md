@@ -1,7 +1,7 @@
 # ccskill-gptimage Gallery
 
 OpenAI gpt-image-2 で **何が作れるか** を実物で示す作例ギャラリー。
-Phase 4 効果検証(2026-04-24)で生成した **SKILL 公式一次資料ベース刷新後の v2 / 35 枚** を掲載。**35/35 すべて一発成功(再生成ゼロ)** / 合計 ¥905 ($6.04)。
+OpenAI Cookbook ベースで刷新した SKILL.md で生成した **35 枚** を掲載。**35/35 すべて一発成功(再生成ゼロ)** / 合計 ¥905 ($6.04)。
 
 すべての画像にメタデータ JSON サイドカー(`{name}.png.json`)が付属しており、プロンプト・revised_prompt・パラメータが完全再現可能です。
 
@@ -17,7 +17,7 @@ Phase 4 効果検証(2026-04-24)で生成した **SKILL 公式一次資料ベー
 
 `1024×1024 / high` — 自然光、編集系雑誌品質、被写界深度、`50mm lens look`
 
-<img src="../assets/capability-survey/categories/v2/01_photorealistic_portrait_woman.png" width="500" alt="photorealistic portrait">
+<img src="../assets/capability-survey/categories/01_photorealistic_portrait_woman.png" width="500" alt="photorealistic portrait">
 
 ---
 
@@ -25,7 +25,7 @@ Phase 4 効果検証(2026-04-24)で生成した **SKILL 公式一次資料ベー
 
 `1024×1024 / high` — クリーンな線画、和装鎧、桜の散り
 
-<img src="../assets/capability-survey/categories/v2/02_anime_warrior_character.png" width="500" alt="anime warrior">
+<img src="../assets/capability-survey/categories/02_anime_warrior_character.png" width="500" alt="anime warrior">
 
 ---
 
@@ -33,7 +33,7 @@ Phase 4 効果検証(2026-04-24)で生成した **SKILL 公式一次資料ベー
 
 `1536×1024 / high` — 湿式技法のにじみ、東洋的構図、紙質テクスチャ
 
-<img src="../assets/capability-survey/categories/v2/03_watercolor_mountain_landscape.png" width="700" alt="watercolor landscape">
+<img src="../assets/capability-survey/categories/03_watercolor_mountain_landscape.png" width="700" alt="watercolor landscape">
 
 ---
 
@@ -41,7 +41,7 @@ Phase 4 効果検証(2026-04-24)で生成した **SKILL 公式一次資料ベー
 
 `1024×1024 / high` — 配置・小物・配色すべてプロンプト通り
 
-<img src="../assets/capability-survey/categories/v2/04_isometric_3d_reading_room.png" width="500" alt="isometric reading room">
+<img src="../assets/capability-survey/categories/04_isometric_3d_reading_room.png" width="500" alt="isometric reading room">
 
 ---
 
@@ -49,7 +49,7 @@ Phase 4 効果検証(2026-04-24)で生成した **SKILL 公式一次資料ベー
 
 `1024×1536 / high` — pixel-perfect、入力フィールド・ボタン・リンクすべて指定通り、タイポ階層(32pt/14pt/16pt)も忠実
 
-<img src="../assets/capability-survey/categories/v2/05_ui_mockup_login_english.png" width="400" alt="login UI mockup">
+<img src="../assets/capability-survey/categories/05_ui_mockup_login_english.png" width="400" alt="login UI mockup">
 
 ---
 
@@ -57,7 +57,7 @@ Phase 4 効果検証(2026-04-24)で生成した **SKILL 公式一次資料ベー
 
 `1024×1536 / high` — 「設定」「機内モード」「Wi-Fi」「FEEDTAILOR-5G」「サウンドと触覚」全完璧。SF Symbol 風のカラフルアイコンも指定通り。**iPhone 端末フレーム込みで実機モックアップとして使えるレベル**
 
-<img src="../assets/capability-survey/categories/v2/06_ui_mockup_settings_japanese.png" width="400" alt="iOS settings UI in Japanese">
+<img src="../assets/capability-survey/categories/06_ui_mockup_settings_japanese.png" width="400" alt="iOS settings UI in Japanese">
 
 ---
 
@@ -65,7 +65,7 @@ Phase 4 効果検証(2026-04-24)で生成した **SKILL 公式一次資料ベー
 
 `1024×1536 / high` — 数値 12/18/27/35 完全保持、軸ラベル・"+192% YoY" コラル色も verbatim 再現。Cookbook 4.10 ピッチデッキパターン適用で板書品質
 
-<img src="../assets/capability-survey/categories/v2/07_infographic_quarterly_revenue.png" width="400" alt="infographic">
+<img src="../assets/capability-survey/categories/07_infographic_quarterly_revenue.png" width="400" alt="infographic">
 
 ---
 
@@ -73,7 +73,7 @@ Phase 4 効果検証(2026-04-24)で生成した **SKILL 公式一次資料ベー
 
 `1024×1024 / high` — API Gateway → 3 services → 3 DBs(`auth_db`/`orders_db`/`payments_db`)、Kafka、点線矢印すべて指定通り
 
-<img src="../assets/capability-survey/categories/v2/08_flowchart_microservices_architecture.png" width="500" alt="microservices architecture">
+<img src="../assets/capability-survey/categories/08_flowchart_microservices_architecture.png" width="500" alt="microservices architecture">
 
 ---
 
@@ -81,7 +81,7 @@ Phase 4 効果検証(2026-04-24)で生成した **SKILL 公式一次資料ベー
 
 `1024×1024 / high` — 湯気、白濁スープ、煮玉子の黄身、紅生姜まで生々しい質感
 
-<img src="../assets/capability-survey/categories/v2/09_food_photo_tonkotsu_ramen.png" width="500" alt="tonkotsu ramen">
+<img src="../assets/capability-survey/categories/09_food_photo_tonkotsu_ramen.png" width="500" alt="tonkotsu ramen">
 
 ---
 
@@ -89,7 +89,7 @@ Phase 4 効果検証(2026-04-24)で生成した **SKILL 公式一次資料ベー
 
 `1536×1024 / high` — コンクリート × 木の現代住宅、リフレクションプール、ゴールデンアワー
 
-<img src="../assets/capability-survey/categories/v2/10_architectural_render_modern_house.png" width="700" alt="modern architecture render">
+<img src="../assets/capability-survey/categories/10_architectural_render_modern_house.png" width="700" alt="modern architecture render">
 
 ---
 
@@ -97,7 +97,7 @@ Phase 4 効果検証(2026-04-24)で生成した **SKILL 公式一次資料ベー
 
 `1024×1024 / high` — 提灯付き居酒屋、自販機、配線、自転車、アーバンスケッチャー風水彩ウォッシュ。路地の奥行きとパース感が秀逸
 
-<img src="../assets/capability-survey/categories/v2/11_hand_drawn_pen_sketch_tokyo_alley.png" width="500" alt="urban sketch tokyo alley">
+<img src="../assets/capability-survey/categories/11_hand_drawn_pen_sketch_tokyo_alley.png" width="500" alt="urban sketch tokyo alley">
 
 ---
 
@@ -105,7 +105,7 @@ Phase 4 効果検証(2026-04-24)で生成した **SKILL 公式一次資料ベー
 
 `1024×1536 / high` — **タイトル「プログラマあるある」+ 4 つの吹き出しすべて読める日本語!**「なぜか動いた…!」「なぜ動くんだろう?」「ちょっと整理しよう」「なぜ動かない…!?」が完璧再現。**眼鏡 + グレーフーディーのキャラが全 4 コマで同一**(Cookbook 6.4 キャラ一貫性パターン)
 
-<img src="../assets/capability-survey/categories/v2/12_comic_4koma_japanese_programmer.png" width="400" alt="Japanese 4-koma manga">
+<img src="../assets/capability-survey/categories/12_comic_4koma_japanese_programmer.png" width="400" alt="Japanese 4-koma manga">
 
 ---
 
@@ -113,7 +113,7 @@ Phase 4 効果検証(2026-04-24)で生成した **SKILL 公式一次資料ベー
 
 `1024×1024 / high` — 1 本の連続線で矢印→円のループ、アンバードット、"VECTRA" 字間美しい
 
-<img src="../assets/capability-survey/categories/v2/13_logo_abstract_mark_vectra.png" width="500" alt="VECTRA logo">
+<img src="../assets/capability-survey/categories/13_logo_abstract_mark_vectra.png" width="500" alt="VECTRA logo">
 
 ---
 
@@ -121,7 +121,7 @@ Phase 4 効果検証(2026-04-24)で生成した **SKILL 公式一次資料ベー
 
 `1024×1536 / high` — **「未来は描かれるものではない、計画されるものだ。」が縦書き(tategaki)で完璧!** 句読点も縦中横で正しく配置。英語サブと金線も指定通り。これは gpt-image-1 系では不可能だった領域
 
-<img src="../assets/capability-survey/categories/v2/14_japanese_poster_vertical_tategaki.png" width="400" alt="Japanese vertical poster">
+<img src="../assets/capability-survey/categories/14_japanese_poster_vertical_tategaki.png" width="400" alt="Japanese vertical poster">
 
 ---
 
@@ -129,7 +129,7 @@ Phase 4 効果検証(2026-04-24)で生成した **SKILL 公式一次資料ベー
 
 `1024×1024 / high` — 流動するコーラル/ピーチ/ラベンダー/金のリボン、液体水銀風、ギャラリー品質
 
-<img src="../assets/capability-survey/categories/v2/15_abstract_generative_ribbons.png" width="500" alt="abstract generative art">
+<img src="../assets/capability-survey/categories/15_abstract_generative_ribbons.png" width="500" alt="abstract generative art">
 
 ---
 
@@ -137,7 +137,7 @@ Phase 4 効果検証(2026-04-24)で生成した **SKILL 公式一次資料ベー
 
 `1024×1024 / high` — ドリップコーヒーを淹れる手元、桃・ノート・銅鍋、35mm フィルム調
 
-<img src="../assets/capability-survey/categories/v2/16_daily_morning_kitchen.png" width="500" alt="morning kitchen snapshot">
+<img src="../assets/capability-survey/categories/16_daily_morning_kitchen.png" width="500" alt="morning kitchen snapshot">
 
 ---
 
@@ -145,7 +145,7 @@ Phase 4 効果検証(2026-04-24)で生成した **SKILL 公式一次資料ベー
 
 `1536×1024 / high` — 巨大な杉、God-rays、シダ・苔、ナショジオクラス
 
-<img src="../assets/capability-survey/categories/v2/17_nature_misty_cedar_forest.png" width="700" alt="misty cedar forest">
+<img src="../assets/capability-survey/categories/17_nature_misty_cedar_forest.png" width="700" alt="misty cedar forest">
 
 ---
 
@@ -153,7 +153,7 @@ Phase 4 効果検証(2026-04-24)で生成した **SKILL 公式一次資料ベー
 
 `1536×1024 / high` — 火山岩海岸、シルクの波(長時間露光)、孤独の糸杉、パステルの空
 
-<img src="../assets/capability-survey/categories/v2/18_nature_volcanic_coast_dawn.png" width="700" alt="volcanic coast at dawn">
+<img src="../assets/capability-survey/categories/18_nature_volcanic_coast_dawn.png" width="700" alt="volcanic coast at dawn">
 
 ---
 
@@ -161,7 +161,7 @@ Phase 4 効果検証(2026-04-24)で生成した **SKILL 公式一次資料ベー
 
 `1536×1024 / high` — 対角線スクランブル交差点、雨に濡れた路面のネオン反射、傘さす人混みのモーションブラー、縦書き巨大日本語看板群(`カラオケ 747` `居酒屋 2F・3F` `薬方` `牛繁 焼肉` `コンタクトのアイシティ` 等)が自発描画。シネマティック teal-orange
 
-<img src="../assets/capability-survey/categories/v2/19_urban_tokyo_rainy_night_v3.png" width="700" alt="Tokyo Shibuya scramble crossing at rainy night">
+<img src="../assets/capability-survey/categories/19_urban_tokyo_rainy_night_v3.png" width="700" alt="Tokyo Shibuya scramble crossing at rainy night">
 
 ---
 
@@ -169,7 +169,7 @@ Phase 4 効果検証(2026-04-24)で生成した **SKILL 公式一次資料ベー
 
 `1536×1024 / high` — 英国緑のカフェレーサー、ブラウンレザーシート、磨きこまれたクロームエキゾースト、夕日の石畳。Constraints `no brand logos on the bike` 完全遵守
 
-<img src="../assets/capability-survey/categories/v2/20_vehicle_cafe_racer_motorcycle.png" width="700" alt="vintage cafe racer motorcycle">
+<img src="../assets/capability-survey/categories/20_vehicle_cafe_racer_motorcycle.png" width="700" alt="vintage cafe racer motorcycle">
 
 ---
 
@@ -177,7 +177,7 @@ Phase 4 効果検証(2026-04-24)で生成した **SKILL 公式一次資料ベー
 
 `1024×1536 / high` ⭐(コスト有利) — オーバーハングを登るクライマー全身、夕陽の岩肌、ピーク瞬間捕捉
 
-<img src="../assets/capability-survey/categories/v2/21_sports_rock_climbing_action.png" width="400" alt="rock climbing action">
+<img src="../assets/capability-survey/categories/21_sports_rock_climbing_action.png" width="400" alt="rock climbing action">
 
 ---
 
@@ -185,7 +185,7 @@ Phase 4 効果検証(2026-04-24)で生成した **SKILL 公式一次資料ベー
 
 `1024×1024 / high` — 笑顔の柴犬全身、紅葉、ボケ味の温かい光
 
-<img src="../assets/capability-survey/categories/v2/22_pet_shiba_inu_autumn.png" width="500" alt="Shiba Inu in autumn park">
+<img src="../assets/capability-survey/categories/22_pet_shiba_inu_autumn.png" width="500" alt="Shiba Inu in autumn park">
 
 ---
 
@@ -193,7 +193,7 @@ Phase 4 効果検証(2026-04-24)で生成した **SKILL 公式一次資料ベー
 
 `1024×1024 / high` — 警戒の眼差し、雪上の毛皮、ワイルドライフフォト品質
 
-<img src="../assets/capability-survey/categories/v2/23_wildlife_red_fox_snow.png" width="500" alt="red fox in snow">
+<img src="../assets/capability-survey/categories/23_wildlife_red_fox_snow.png" width="500" alt="red fox in snow">
 
 ---
 
@@ -201,7 +201,7 @@ Phase 4 効果検証(2026-04-24)で生成した **SKILL 公式一次資料ベー
 
 `1024×1024 / high` — 単一ウェイトのクリーンな黒線、流れるドレス、ヒール、Hermès 級ファッションスケッチ
 
-<img src="../assets/capability-survey/categories/v2/24_line_drawing_fashion_sketch.png" width="500" alt="fashion line drawing">
+<img src="../assets/capability-survey/categories/24_line_drawing_fashion_sketch.png" width="500" alt="fashion line drawing">
 
 ---
 
@@ -209,7 +209,7 @@ Phase 4 効果検証(2026-04-24)で生成した **SKILL 公式一次資料ベー
 
 `1536×1024 / high` — 濃墨の鷺、淡墨の水面と霧、和紙の風合い、朱印 1 つ(Constraints 通り)、東洋画の正統
 
-<img src="../assets/capability-survey/categories/v2/25_sumi_e_heron_ink_wash.png" width="700" alt="sumi-e heron ink wash">
+<img src="../assets/capability-survey/categories/25_sumi_e_heron_ink_wash.png" width="700" alt="sumi-e heron ink wash">
 
 ---
 
@@ -217,7 +217,7 @@ Phase 4 効果検証(2026-04-24)で生成した **SKILL 公式一次資料ベー
 
 `1024×1024 / high` — 不器用な線、家族 + 家 + 太陽 + 猫、皺のある紙、本物のチャイルドアート再現
 
-<img src="../assets/capability-survey/categories/v2/26_kids_crayon_doodle_family.png" width="500" alt="kid's crayon doodle">
+<img src="../assets/capability-survey/categories/26_kids_crayon_doodle_family.png" width="500" alt="kid's crayon doodle">
 
 ---
 
@@ -247,21 +247,21 @@ Phase 4 効果検証(2026-04-24)で生成した **SKILL 公式一次資料ベー
 </tr>
 <tr>
   <th align="right">low<br><sub>¥1〜2</sub></th>
-  <td><img src="../assets/capability-survey/grid/v2/grid_book_coffee_1024x1024_low.png" width="200" alt="1024x1024 low"></td>
-  <td><img src="../assets/capability-survey/grid/v2/grid_book_coffee_1024x1536_low.png" width="160" alt="1024x1536 low"></td>
-  <td><img src="../assets/capability-survey/grid/v2/grid_book_coffee_1536x1024_low.png" width="240" alt="1536x1024 low"></td>
+  <td><img src="../assets/capability-survey/grid/grid_book_coffee_1024x1024_low.png" width="200" alt="1024x1024 low"></td>
+  <td><img src="../assets/capability-survey/grid/grid_book_coffee_1024x1536_low.png" width="160" alt="1024x1536 low"></td>
+  <td><img src="../assets/capability-survey/grid/grid_book_coffee_1536x1024_low.png" width="240" alt="1536x1024 low"></td>
 </tr>
 <tr>
   <th align="right">medium<br><sub>¥8〜12</sub></th>
-  <td><img src="../assets/capability-survey/grid/v2/grid_book_coffee_1024x1024_medium.png" width="200" alt="1024x1024 medium"></td>
-  <td><img src="../assets/capability-survey/grid/v2/grid_book_coffee_1024x1536_medium.png" width="160" alt="1024x1536 medium"></td>
-  <td><img src="../assets/capability-survey/grid/v2/grid_book_coffee_1536x1024_medium.png" width="240" alt="1536x1024 medium"></td>
+  <td><img src="../assets/capability-survey/grid/grid_book_coffee_1024x1024_medium.png" width="200" alt="1024x1024 medium"></td>
+  <td><img src="../assets/capability-survey/grid/grid_book_coffee_1024x1536_medium.png" width="160" alt="1024x1536 medium"></td>
+  <td><img src="../assets/capability-survey/grid/grid_book_coffee_1536x1024_medium.png" width="240" alt="1536x1024 medium"></td>
 </tr>
 <tr>
   <th align="right">high<br><sub>¥25〜32</sub></th>
-  <td><img src="../assets/capability-survey/grid/v2/grid_book_coffee_1024x1024_high.png" width="200" alt="1024x1024 high"></td>
-  <td><img src="../assets/capability-survey/grid/v2/grid_book_coffee_1024x1536_high.png" width="160" alt="1024x1536 high ⭐"></td>
-  <td><img src="../assets/capability-survey/grid/v2/grid_book_coffee_1536x1024_high.png" width="240" alt="1536x1024 high"></td>
+  <td><img src="../assets/capability-survey/grid/grid_book_coffee_1024x1024_high.png" width="200" alt="1024x1024 high"></td>
+  <td><img src="../assets/capability-survey/grid/grid_book_coffee_1024x1536_high.png" width="160" alt="1024x1536 high ⭐"></td>
+  <td><img src="../assets/capability-survey/grid/grid_book_coffee_1536x1024_high.png" width="240" alt="1536x1024 high"></td>
 </tr>
 </table>
 
