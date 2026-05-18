@@ -8,9 +8,11 @@ Sister skill: [ccskill-nanobanana](https://github.com/feedtailor/ccskill-nanoban
 
 ## Features
 
-- **🆕 No API key needed** — with a ChatGPT subscription and [Codex CLI](https://github.com/openai/codex), call gpt-image-2 without `OPENAI_API_KEY` (`--backend codex`). Verified: 35 high-quality images in one session without hitting the subscription cap ([comparison](docs/codex-vs-api-comparison.md))
-- **Multilingual text rendering** — Japanese (kanji/kana) + emoji posters and banners come out readable in one shot
-- **Agentic reasoning** — first agentic image generation model; plans structure before drawing
+This skill removes the need to write prompts explicitly: it composes an optimal prompt from your project context and generates images with ChatGPT Image 2.0 inside a Claude Code session.
+
+- **🆕 No API key needed** — with a ChatGPT subscription and [Codex CLI](https://github.com/openai/codex), call gpt-image-2 without `OPENAI_API_KEY` (`--backend codex`)
+- **Multilingual text rendering** — Japanese (kanji/kana), emoji, and vertical writing rendered at high quality
+- **Agentic reasoning** — plans structure from the prompt before drawing
 - **Reference-image editing** — base new images on existing ones via `--reference`
 - **Mask editing (inpainting)** — replace parts of existing images (requires `--backend api`)
 - **Two backends with auto fallback (`--backend auto`)** — prefers Codex when available, falls back to API on failure
@@ -19,7 +21,7 @@ Sister skill: [ccskill-nanobanana](https://github.com/feedtailor/ccskill-nanoban
 
 ## Examples
 
-A handful of one-shot examples, all generated at `--quality high` with **no regeneration and no human prompt-writing** (Claude composed the prompts from intent + SKILL.md). The full **35-image gallery** including a 3×3 resolution-quality cost grid is at [`docs/gallery.md`](docs/gallery.md) →
+A handful of one-shot examples, all generated at `--quality high` with no regeneration and no human prompt-writing (Claude composed the prompts from intent + SKILL.md). The full gallery is at [`docs/gallery.md`](docs/gallery.md) →
 
 <table>
 <tr>
@@ -34,21 +36,19 @@ A handful of one-shot examples, all generated at `--quality high` with **no rege
 </tr>
 </table>
 
-35/35 succeeded in one shot. Total cost for the entire survey: **¥910 ($6.04)**.
-
 ## Setup
 
 ### Requirements (two options)
 
-This skill works if either backend is available:
+This skill runs on either of two backends.
 
-**Option A: ChatGPT subscription + Codex CLI (recommended — no API key needed)**
-- **Python 3.10+**
-- **ChatGPT subscription** (Plus or higher)
-- **[Codex CLI](https://github.com/openai/codex) installed and `codex login` completed**
+**Option A: ChatGPT subscription + Codex CLI**
+- Python 3.10+
+- ChatGPT subscription (Plus or higher)
+- [Codex CLI](https://github.com/openai/codex) installed and `codex login` completed
 - → No API key, no extra billing (covered by your subscription quota)
 
-**Option B: OpenAI API key (classic)**
+**Option B: OpenAI API key**
 - **Python 3.10+**
 - **OpenAI API key** + **Organization Verification completed** (otherwise 403)
 - → Pay-as-you-go (a few cents to tens of cents per image)
@@ -58,7 +58,7 @@ If both are available, `--backend auto` (default) prefers Codex and falls back t
 ### 1. Clone
 
 ```bash
-cd /path/to/your-projects
+cd /path/to/projects
 git clone https://github.com/feedtailor/ccskill-gptimage.git
 cd ccskill-gptimage
 ```
@@ -96,6 +96,7 @@ OPENAI_API_KEY=sk-...
 ### 4. Install dependencies
 
 ```bash
+cd /path/to/ccskill-gptimage
 python3 -m venv venv
 source venv/bin/activate
 python -m pip install -r requirements.txt
@@ -179,25 +180,7 @@ ln -s $CCSKILL_GPTIMAGE_DIR/.claude/skills/ccskill-gptimage \
 
 Claude Code will auto-discover and use this skill whenever image generation is needed. `git pull` here updates every linked project.
 
-### Skill language
 
-Default is English (`SKILL.md`). To switch to Japanese:
-
-```bash
-cd $CCSKILL_GPTIMAGE_DIR/.claude/skills/ccskill-gptimage
-
-mv SKILL.md SKILL.en.md
-ln -s SKILL.ja.md SKILL.md
-```
-
-## Tests
-
-```bash
-source venv/bin/activate
-python -m pytest tests/ -v
-```
-
-API calls are mocked, so no API key is required to run tests.
 
 ## Specs
 
@@ -212,7 +195,7 @@ API calls are mocked, so no API key is required to run tests.
 
 | Use case | First choice | Why |
 |---|---|---|
-| Posters with Japanese/kanji text | **ccskill-gptimage** | Strongest text rendering |
+| Posters with Japanese/kanji text | **ccskill-gptimage** | gpt-image-2's text rendering is advantageous |
 | Business infographics | **ccskill-gptimage** | Agentic reasoning plans structure |
 | Editing / partial modification | **ccskill-gptimage** | Always processes input at max fidelity |
 | Transparent PNG (logos, icons, sprites) | Either | gpt-image-2 can't, but `--model gpt-image-1.5` can. `rembg` post-processing also works. |
