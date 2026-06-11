@@ -2,26 +2,20 @@
 
 [日本語 README](README.ja.md)
 
-A Claude Code image-generation skill powered by OpenAI **gpt-image-2** (ChatGPT Images 2.0). Also usable as a standalone CLI.
-
-Sister skill: [ccskill-nanobanana](https://github.com/feedtailor/ccskill-nanobanana) (Gemini 3 Pro Image)
+A Claude Code image-generation skill powered by OpenAI **gpt-image-2** (ChatGPT Images 2.0). Also usable as a standalone image-generation script.
 
 ## Features
 
-This skill removes the need to write prompts explicitly: it composes an optimal prompt from your project context and generates images with ChatGPT Image 2.0 inside a Claude Code session.
+You don't need to write prompts explicitly: the skill composes an optimal prompt from your project information and context, and generates images with ChatGPT Images 2.0 inside a Claude Code session.
 
-- **🆕 No API key needed** — with a ChatGPT subscription and [Codex CLI](https://github.com/openai/codex), call gpt-image-2 without `OPENAI_API_KEY` (`--backend codex`)
-- **Multilingual text rendering** — Japanese (kanji/kana), emoji, and vertical writing rendered at high quality
-- **Agentic reasoning** — plans structure from the prompt before drawing
-- **Reference-image editing** — base new images on existing ones via `--reference`
-- **Mask editing (inpainting)** — replace parts of existing images (requires `--backend api`)
-- **Two backends with auto fallback (`--backend auto`)** — prefers Codex when available, falls back to API on failure
-- **Auto metadata sidecar** — prompt, `revised_prompt`, parameters saved as JSON
-- **Cost-aware defaults** — built-in knowledge that portrait `high` is cheaper than square `high`
+- **No API key needed** — works in association with your ChatGPT subscription
+- **Multilingual text rendering** — strong at non-Latin scripts like Japanese (kanji/kana/vertical), Korean, and Chinese
+- **Reference-image editing** — composite and partially edit existing images via `--reference`
+- **Auto metadata sidecar** — prompt, `revised_prompt`, and parameters saved as JSON
 
 ## Examples
 
-A handful of one-shot examples, all generated at `--quality high` with no regeneration and no human prompt-writing (Claude composed the prompts from intent + SKILL.md). The full gallery is at [`docs/gallery.md`](docs/gallery.md) →
+Examples generated with this skill. See the full gallery at [`docs/gallery.md`](docs/gallery.md).
 
 <table>
 <tr>
@@ -36,25 +30,21 @@ A handful of one-shot examples, all generated at `--quality high` with no regene
 </tr>
 </table>
 
-## Setup
+## Requirements
 
-### Requirements (two options)
-
-This skill runs on either of two backends.
+This skill can be used in two ways, each with different requirements. You can also switch between the two backends with the `--backend` parameter.
 
 **Option A: ChatGPT subscription + Codex CLI**
 - Python 3.10+
 - ChatGPT subscription (Plus or higher)
-- [Codex CLI](https://github.com/openai/codex) installed and `codex login` completed
-- → No API key, no extra billing (covered by your subscription quota)
+- [Codex CLI](https://github.com/openai/codex) installed and logged in via `codex login`
 
 **Option B: OpenAI API key**
-- **Python 3.10+**
-- **OpenAI API key** + **Organization Verification completed** (otherwise 403)
-- → Pay-as-you-go (a few cents to tens of cents per image)
+- Python 3.10+
+- OpenAI API key
+- Organization Verification
 
-If both are available, `--backend auto` (default) prefers Codex and falls back to API on failure.
-
+## Setup
 ### 1. Clone the repository
 Clone anywhere you prefer.
 
@@ -63,42 +53,39 @@ cd /path/to/projects
 git clone https://github.com/feedtailor/ccskill-gptimage.git
 ```
 
-### 2. Set up the backend
+### 2. Prepare image generation
 
-Make gpt-image-2 available. There are two options — Option A is recommended.
+Make ChatGPT Images 2.0 available. The preparation differs by usage, so pick the one that fits — Option A is recommended.
 
-**A: Use the Codex CLI**
-
-(Skip this if you already have the Codex CLI linked to your ChatGPT subscription.)
+#### Option A: ChatGPT subscription + Codex CLI
+(Skip this if you already use the Codex CLI linked to your subscription.)
 
 ```bash
 # Install Codex CLI (Homebrew)
 brew install codex
 # Log in with your ChatGPT account
 codex login
-# Verify: should print OK if tokens.access_token is present
-cat ~/.codex/auth.json | python -c "import sys,json;print('OK' if json.load(sys.stdin).get('tokens',{}).get('access_token') else 'NG')"
 ```
 
-**B: Use an API key**
+#### Option B: OpenAI API key
+Configure the following on the [OpenAI Platform](https://platform.openai.com/):
 
-Using gpt-image-2 requires billing to be enabled. Do the following:
+- (a) Issue an API key at [API keys](https://platform.openai.com/api-keys)
+- (b) Complete verification at [Organization Settings](https://platform.openai.com/settings/organization/general) → General → Verification
 
-- Issue an API key at [OpenAI Platform](https://platform.openai.com/api-keys)
-- Set your Organization to **Verified** status<br>(Settings → General → Verifications)
-
-### 3. Set the API key environment variable (Option B only)
+Once configured, write the API key into a `.env` file.
 
 ```bash
 cp .env.example .env
 ```
 
-Edit `.env`:
+Add the API key from (a) to `.env`:
 ```
 OPENAI_API_KEY=sk-...
 ```
 
-### 4. Install dependencies
+### 3. Install dependencies
+Move into the directory where you cloned ccskill-gptimage and run:
 
 ```bash
 cd /path/to/ccskill-gptimage
@@ -107,7 +94,7 @@ source venv/bin/activate
 python -m pip install -r requirements.txt
 ```
 
-### 5. Set the skill path environment variable
+### 4. Set the command path environment variable
 
 Add the following to `.bashrc` / `.zshrc`:
 
@@ -116,10 +103,10 @@ export CCSKILL_GPTIMAGE_DIR="/path/to/ccskill-gptimage"
 ```
 
 ## Usage
-First, create a symbolic link under your target project's `.claude/skills/` directory.
+First, create a symbolic link under the `.claude/skills` directory of the project where you want to use the skill.
 
 ```bash
-# Create .claude/skills under your project if it doesn't exist
+# Create the .claude/skills directory under your project if it doesn't exist
 cd /path/to/your-project/
 mkdir -p .claude/skills
 
@@ -127,7 +114,7 @@ mkdir -p .claude/skills
 ln -s $CCSKILL_GPTIMAGE_DIR/.claude/skills/ccskill-gptimage .claude/skills/ccskill-gptimage
 ```
 
-In Claude Code, just ask for image generation with gpt-image-2, or invoke the skill explicitly by typing `/ccskill-gptimage` in your prompt.
+In Claude Code, ask it to generate images with ChatGPT Images 2.0, or invoke the skill explicitly by typing `/ccskill-gptimage` in your prompt.
 
 You don't need to write a detailed prompt yourself — Claude Code composes the optimal prompt from the conversation context and project information, and picks appropriate options for the task.
 
@@ -142,7 +129,7 @@ git pull
 
 ## Using the CLI standalone
 
-You can also use this as an image generation CLI, without going through the Claude Code skill.
+You can also use it as an image-generation command.
 
 ```bash
 cd $CCSKILL_GPTIMAGE_DIR
@@ -156,13 +143,13 @@ python generate_image.py "a coastal sunset"
 |---|---|---|
 | `--size` | Output size (`auto`/`1024x1024`/`1024x1536`/`1536x1024`) | `1024x1024` |
 | `--quality` | Quality (`auto`/`low`/`medium`/`high`) | `auto` |
-| `--background` | Background (`auto`/`opaque`). `transparent` requires `--model gpt-image-1.5` | `auto` |
+| `--background` | Background (`auto`/`opaque`). `transparent` is unsupported by gpt-image-2 (use `gpt-image-1.5`) | `auto` |
 | `--output-format` | Output format (`png`/`jpeg`/`webp`) | `png` |
 | `--output-compression` | Compression for jpeg/webp (0-100) | none |
 | `--output` | Output directory | `./generated_images` |
 | `--reference` | Reference image (repeatable) | none |
 | `--mask` | Mask image (transparent area = editable) | none |
-| `--input-fidelity` | Not needed for gpt-image-2 (always max fidelity). For `gpt-image-1.5` only | none |
+| `--input-fidelity` | Not needed for gpt-image-2 (always max fidelity). For `gpt-image-1.5` | none |
 | `--moderation` | Moderation (`auto`/`low`) | `auto` |
 | `--backend` | Generation backend (`auto`/`codex`/`api`). `auto` prefers Codex, falls back to API on failure | `auto` |
 
@@ -181,13 +168,13 @@ python generate_image.py "Place the same fox logo on a deep navy background with
 # Multi-reference composition
 python generate_image.py "Photorealistic gift basket on white" --reference ./a.png --reference ./b.png --reference ./c.png
 
-# Mask inpainting
-python generate_image.py "A sunlit indoor lounge with a pool" --reference ./lounge.png --mask ./mask.png
+# Mask-guided editing (requires --backend api)
+python generate_image.py "A sunlit indoor lounge with a pool" --reference ./lounge.png --mask ./mask.png --backend api
 ```
 
 ### Output files
 
-Each image is saved with a **metadata JSON sidecar** (`{name}.{ext}.json`) for reproduction and refinement:
+Each image is saved with a **metadata JSON** sidecar (`{name}.{ext}.json`) for reproduction and refinement:
 ```json
 {
   "model": "gpt-image-2",
@@ -204,18 +191,16 @@ Each image is saved with a **metadata JSON sidecar** (`{name}.{ext}.json`) for r
 - **Model**: `gpt-image-2` (snapshot `gpt-image-2-2026-04-21`)
 - **Input**: text / images
 - **Output**: image only (`b64_json`, no URL is returned)
-- **Max resolution**: 2K
+- **Max resolution**: the model supports up to 4K (longest side ≤ 3840px). This skill's CLI `--size` is currently limited to safe values (max `1536x1024`); use a direct API call for 4K
 - **Endpoints**: `/v1/images/generations`, `/v1/images/edits`
 - **Filename**: timestamp form (e.g. `20260423_153045.png`)
+- **Moderation**: `auto` (default) / `low`
 
 ## Troubleshooting
 
 | Symptom | Fix |
 |---|---|
-| `403 Forbidden` | Complete OpenAI Organization Verification |
-| `Rate limit exceeded` | Tier 1 is 5 IPM only — production needs Tier 3+ |
-| Timeout | Set SDK timeout ≥ 120 s |
-| Broken Japanese text | Wrap in `" "`; specify font (`serif Japanese font`) |
+| `403 Forbidden` | OpenAI Organization Verification is incomplete → complete it in Organization Settings |
 
 ## License
 
