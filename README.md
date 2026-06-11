@@ -141,7 +141,7 @@ python generate_image.py "a coastal sunset"
 
 | Option | Description | Default |
 |---|---|---|
-| `--size` | Output size (`auto`/`1024x1024`/`1024x1536`/`1536x1024`) | `1024x1024` |
+| `--size` | Output size: `auto` or free `WxH` (constraints below). Presets: `1024x1024`/`1024x1536`/`1536x1024`; up to `3840x2160` (4K) | `1024x1024` |
 | `--quality` | Quality (`auto`/`low`/`medium`/`high`) | `auto` |
 | `--background` | Background (`auto`/`opaque`). `transparent` is unsupported by gpt-image-2 (use `gpt-image-1.5`) | `auto` |
 | `--output-format` | Output format (`png`/`jpeg`/`webp`) | `png` |
@@ -191,7 +191,7 @@ Each image is saved with a **metadata JSON** sidecar (`{name}.{ext}.json`) for r
 - **Model**: `gpt-image-2` (snapshot `gpt-image-2-2026-04-21`)
 - **Input**: text / images
 - **Output**: image only (`b64_json`, no URL is returned)
-- **Max resolution**: the model supports up to 4K (longest side ≤ 3840px). This skill's CLI `--size` is currently limited to safe values (max `1536x1024`); use a direct API call for 4K
+- **Max resolution**: up to 4K (longest side ≤ 3840px). `--size` accepts free `WxH` validated against the model's constraints — each side a multiple of 16, longest side ≤ 3840px, aspect ratio ≤ 3:1, total pixels 655,360–8,294,400. `--backend api` honors the exact size (e.g. `3840x2160`); `--backend codex` is non-deterministic (size not guaranteed)
 - **Endpoints**: `/v1/images/generations`, `/v1/images/edits`
 - **Filename**: timestamp form (e.g. `20260423_153045.png`)
 - **Moderation**: `auto` (default) / `low`
