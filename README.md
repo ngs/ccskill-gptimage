@@ -8,7 +8,7 @@ A Claude Code image-generation skill powered by OpenAI **gpt-image-2** (ChatGPT 
 
 You don't need to write prompts explicitly: the skill composes an optimal prompt from your project information and context, and generates images with ChatGPT Images 2.0 inside a Claude Code session.
 
-- **No API key needed** — works in association with your ChatGPT subscription
+- **No API key needed** — works in association with your ChatGPT subscription (an API key is required for 4K / strict exact-size generation)
 - **Multilingual text rendering** — strong at non-Latin scripts like Japanese (kanji/kana/vertical), Korean, and Chinese
 - **Reference-image editing** — composite and partially edit existing images via `--reference`
 - **Auto metadata sidecar** — prompt, `revised_prompt`, and parameters saved as JSON
@@ -32,7 +32,7 @@ Examples generated with this skill. See the full gallery at [`docs/gallery.md`](
 
 ## Requirements
 
-This skill can be used in two ways, each with different requirements. You can also switch between the two backends with the `--backend` parameter.
+This skill can be used in two ways, each with different requirements. You can also switch between the two backends with the `--backend` parameter. For 4K generation or strict size control, Option B (API key) is required, so using both together is recommended.
 
 **Option A: ChatGPT subscription + Codex CLI**
 - Python 3.10+
