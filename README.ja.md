@@ -141,7 +141,7 @@ python generate_image.py "夕焼けの海岸線"
 
 | オプション | 説明 | デフォルト |
 |---|---|---|
-| `--size` | 出力サイズ (`auto`/`1024x1024`/`1024x1536`/`1536x1024`) | `1024x1024` |
+| `--size` | 出力サイズ: `auto` または自由な `WxH`(制約は下記)。プリセット `1024x1024`/`1024x1536`/`1536x1024`、最大 `3840x2160`(4K) | `1024x1024` |
 | `--quality` | 品質 (`auto`/`low`/`medium`/`high`) | `auto` |
 | `--background` | 背景 (`auto`/`opaque`)。`transparent` は gpt-image-2 未対応(`gpt-image-1.5` で対応) | `auto` |
 | `--output-format` | 出力形式 (`png`/`jpeg`/`webp`) | `png` |
@@ -191,7 +191,7 @@ python generate_image.py "A sunlit indoor lounge with a pool" --reference ./loun
 - **モデル**: `gpt-image-2`(`gpt-image-2-2026-04-21` スナップショット)
 - **入力**: テキスト / 画像
 - **出力**: 画像のみ(`b64_json` 形式、URLは返らない)
-- **最大解像度**: モデルは 4K(最大辺 3840px)対応。本スキル CLI の `--size` は現状 safe な値に限定(最大 `1536x1024`)。4K 等を出すには API 直接呼び出しが必要
+- **最大解像度**: 4K(最大辺 3840px)対応。`--size` は自由な `WxH` を受け付け、モデルの制約(各辺 16 の倍数 / 最大辺 3840px / アスペクト比 3:1 以下 / 総ピクセル 655,360〜8,294,400)で検証する。`--backend api` は厳密にサイズを守る(例 `3840x2160`)。`--backend codex` は非決定的(サイズ非保証)
 - **エンドポイント**: `/v1/images/generations`, `/v1/images/edits`
 - **ファイル名**: タイムスタンプ形式 (例: `20260423_153045.png`)
 - **モデレーション**: `auto`(デフォルト) / `low`

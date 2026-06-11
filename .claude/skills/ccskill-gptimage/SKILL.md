@@ -34,7 +34,7 @@ $CCSKILL_GPTIMAGE_DIR/venv/bin/python $CCSKILL_GPTIMAGE_DIR/generate_image.py "p
 
 | Option | Description | Default | Values |
 |---|---|---|---|
-| `--size` | Output size | `1024x1024` | `auto` / `1024x1024` / `1024x1536` (portrait) / `1536x1024` (landscape) |
+| `--size` | Output size (`auto` or free `WxH`; see Resolution constraints) | `1024x1024` | `auto` / `1024x1024` / `1024x1536` / `1536x1024` / up to `3840x2160` (4K) |
 | `--quality` | Quality | `auto` | `auto` / `low` / `medium` / `high` |
 | `--background` | Background | `auto` | `auto` / `opaque` (for `transparent` use `--model gpt-image-1.5`) |
 | `--output-format` | Output format | `png` | `png` / `jpeg` / `webp` |
@@ -155,7 +155,7 @@ The auto-max-fidelity typically preserves non-target regions down to UI text and
 - **Timeout**: up to 2 min for high-quality/complex prompts — set SDK timeout ≥ 120 s
 - **Response**: `b64_json` only (no URLs)
 - **Not supported**: function calling, structured outputs
-- **Resolution**: per Cookbook, gpt-image-2 supports "any resolution per constraints"; this skill's CLI currently restricts to 4 sizes — `auto / 1024x1024 / 1024x1536 / 1536x1024`. Cookbook occasionally uses `1536x864` (16:9); use `1536x1024` as the nearest skill-supported landscape.
+- **Resolution**: `--size` accepts `auto` or any `WxH`, validated against gpt-image-2's constraints — **each side a multiple of 16**, **longest side ≤ 3840px** (up to 4K, e.g. `3840x2160`), **aspect ratio ≤ 3:1**, **total pixels 655,360–8,294,400**. Violations are rejected with a specific error *before* any API call. `--backend api` honors the exact size; `--backend codex` is non-deterministic and only warns. Common presets: `1024x1024 / 1024x1536 / 1536x1024`. (Verified 2026-06-11: `3840x2160` generated at exact resolution via `--backend api`.)
 
 ---
 
@@ -246,7 +246,7 @@ Iterate with `--quality low` ($0.006/image). Ship with `medium` ($0.053) or `hig
 | Editing / partial modification | **ccskill-gptimage** | Auto max input fidelity |
 | Photo / illustration single visuals | Either | Comparable cost |
 | Transparent PNG (logos, icons, sprites) | Either | gpt-image-2 can't natively, but (a) `--model gpt-image-1.5`, (b) `rembg` post-processing, (c) ccskill-nanobanana all work |
-| 4K output | ccskill-nanobanana | gpt-image-2 caps at 2K |
+| 4K output | Either | gpt-image-2 supports up to 4K (`3840x2160`, longest side ≤ 3840px) via `--backend api`; nanobanana also works |
 
 ---
 
