@@ -76,6 +76,7 @@ codex login
 上記の設定を終えたら、`.env` ファイルに API キーを記述します。
 
 ```bash
+cd /path/to/projects/ccskill-gptimage
 cp .env.example .env
 ```
 
@@ -89,7 +90,7 @@ OPENAI_API_KEY=sk-...
 ccskill-gptimage を `git clone` したディレクトリに移動し、以下を実行します。
 
 ```bash
-cd /path/to/ccskill-gptimage
+cd /path/to/projects/ccskill-gptimage
 ./install.sh
 ```
 
@@ -102,20 +103,19 @@ cd /path/to/ccskill-gptimage
 
 ## 使い方
 
-任意の Claude Code プロジェクトで、ChatGPT Images 2.0 を使って画像生成するよう指示をするか、明示的に `/ccskill-gptimage` をプロンプトに入力して下さい。お好きな言語で「やりたいこと」を伝えるだけで、Claude Code が文脈から最適なプロンプトを組み立て、サイズ・品質・backend も用途に合わせて自動で選びます。
+任意の Claude Code プロジェクトで、ChatGPT Images 2.0 を使って画像生成するよう指示をする(`gptimage を使って...`)か、明示的に `/ccskill-gptimage` をプロンプトに入力して下さい。お好きな言語で「やりたいこと」を伝えるだけで、Claude Code が文脈から最適なプロンプトを組み立て、サイズ・品質・backend も用途に合わせて自動で選びます。
 
-- プロジェクトの文脈を汲んで生成
+- プロジェクトの文脈を汲んで画像生成
   ```
   LP用HTML @lp.html の中身を見て、内容に合ったヒーロー画像を3パターン生成してください
   ```
-- 資料の複数ページへまとめて
-  ```
-  PowerPointのスライドの3,10,13ページ目に差し込む画像を、各ページの内容に合わせて生成してください
-  ```
-- 既存画像をベースに編集(`@` でファイル参照)
+- 既存画像をベースに画像生成
   ```
   製品を撮影した写真 @product.jpg をベースに、天気と時間帯を「曇り」「夕暮れ時」にした画像を作ってください
   ```
+
+### TIPS
+- 初回は Claude Code が `ccskill-gptimage` の実行許可を求めることがあります。スキップしたい場合、`settings.json` の `permissions.allow` に `Bash(ccskill-gptimage:*)` を追加してください。
 
 ## 更新
 以下の通り本スキルを clone した箇所で `git pull` してください。スキル登録もコマンドも clone 先への symlink なので、自動的に更新が反映されます。
@@ -199,6 +199,20 @@ ccskill-gptimage generate "A sunlit indoor lounge with a pool" --reference ./lou
 - **エンドポイント**: `/v1/images/generations`, `/v1/images/edits`
 - **ファイル名**: タイムスタンプ形式 (例: `20260423_153045.png`)
 - **モデレーション**: `auto`(デフォルト) / `low`
+
+## 生成時間の目安
+
+`1024x1024`・同一プロンプトで各 backend × quality を 3 回計測した中央値(括弧は範囲)。ネットワークや負荷で変動する概算です。
+
+| quality | api | codex |
+|---|---|---|
+| low | 約 16 秒(15–18) | 約 30 秒(22–52) |
+| medium | 約 46 秒(45–49) | 約 25 秒(23–52) |
+| high | 約 138 秒(137–140) | 約 24 秒(22–90) |
+
+- **api は quality に応じてレイテンシが素直に増える**(high は約 2 分強)。値も安定。
+- **codex は agent 層を挟むため概ね 20〜90 秒とばらつきが大きく、quality に比例しない**。codex の quality は非決定的なヒントで、`high` を指定しても api の high 相当の重い生成になるとは限りません(codex high が速いのは品質を完全には反映していない可能性)。**厳密な品質・サイズ・再現性が必要なときは api** を使ってください。
+- 大きいサイズ(4K 等)は相応に時間が伸びます。
 
 ## トラブルシューティング
 

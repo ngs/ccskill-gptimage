@@ -256,6 +256,7 @@ Each image is saved alongside a **metadata JSON sidecar** (`{name}.{ext}.json`) 
 ## Troubleshooting
 
 - **Not sure what's wrong?** → run `ccskill-gptimage doctor` for a quick environment + backend diagnosis (it never reads secret files; reports are presence-based)
+- **Claude Code keeps asking permission to run `ccskill-gptimage`** → add `Bash(ccskill-gptimage:*)` to `permissions.allow` in `~/.claude/settings.json` (the installer intentionally does not modify your settings)
 - **403 Forbidden** → check Org Verification
 - **Rate limit** → upgrade tier or use `--quality low` while iterating
 - **Timeout** → check network; set SDK timeout ≥ 120 s

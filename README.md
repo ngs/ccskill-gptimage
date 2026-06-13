@@ -102,20 +102,19 @@ The installer takes care of everything:
 
 ## Usage
 
-In any Claude Code project, just ask it to generate images with ChatGPT Images 2.0, or type `/ccskill-gptimage` in your prompt. Describe what you want **in any language** — Claude Code builds the optimal prompt from context and auto-selects size, quality, and backend for the task.
+In any Claude Code project, just ask it to generate images with ChatGPT Images 2.0 (e.g. `use gptimage to ...`), or type `/ccskill-gptimage` in your prompt. Describe what you want **in any language** — Claude Code builds the optimal prompt from context and auto-selects size, quality, and backend for the task.
 
 - Generate from project context
   ```
   Look at the LP HTML @lp.html and generate 3 hero-image options that fit its content
   ```
-- Across multiple slides at once
-  ```
-  Generate images for slides 3, 10, and 13 of the PowerPoint, each matching that page's content
-  ```
-- Edit an existing image (reference a file with `@`)
+- Generate based on an existing image
   ```
   Based on the product photo @product.jpg, make versions with the weather/time changed to "overcast" and "dusk"
   ```
+
+### Tips
+- On first use, Claude Code may ask for permission to run `ccskill-gptimage`. To skip it, add `Bash(ccskill-gptimage:*)` to `permissions.allow` in `~/.claude/settings.json`.
 
 
 ## Updating
@@ -200,6 +199,20 @@ Each image is saved with a **metadata JSON** sidecar (`{name}.{ext}.json`) for r
 - **Endpoints**: `/v1/images/generations`, `/v1/images/edits`
 - **Filename**: timestamp form (e.g. `20260423_153045.png`)
 - **Moderation**: `auto` (default) / `low`
+
+## Generation time (rough guide)
+
+Median of 3 runs per backend × quality at `1024x1024`, same prompt (range in parentheses). Approximate — varies with network and load.
+
+| quality | api | codex |
+|---|---|---|
+| low | ~16s (15–18) | ~30s (22–52) |
+| medium | ~46s (45–49) | ~25s (23–52) |
+| high | ~138s (137–140) | ~24s (22–90) |
+
+- **api latency scales with quality** (high takes ~2+ minutes), and timings are stable.
+- **codex runs ~20–90s with high variance and does not scale with quality** — its quality is a non-deterministic hint passed through an agent layer, so a `high` request is not guaranteed to do the same heavy generation as api `high` (codex `high` being fast may mean the quality isn't fully applied). **Use api when you need strict quality/size control or reproducibility.**
+- Larger sizes (e.g. 4K) take proportionally longer.
 
 ## Troubleshooting
 
